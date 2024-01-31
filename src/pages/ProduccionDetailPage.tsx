@@ -1,0 +1,140 @@
+import { useLoaderData } from 'react-router-dom';
+import { ProduccionAnimalLoader } from '../interfaces';
+import {
+	AddProduccion,
+	ButtonModal,
+	CardInfo,
+	EditProduccion,
+	InfoHeaderAnimal,
+	ModalForm,
+} from '../components';
+import { LayoutInfoAnimal } from '../components/animales/detalles/LayoutInfoAnimal';
+import { useGeneralStore } from '../store';
+import { FaPlus } from 'react-icons/fa6';
+import { useProduccionStore } from '../store/produccion/produccion.store';
+import { formatDateShort } from '../helpers/formatDate';
+import { MdEdit } from 'react-icons/md';
+import { FaTrashAlt } from 'react-icons/fa';
+import { useState } from 'react';
+
+const tableHeaders = [
+	'Fecha de registro',
+	'Días de lactancia',
+	'Total de Litros',
+	'Acciones',
+];
+
+export const ProduccionDetailPage = () => {
+	const { animal } = useLoaderData() as ProduccionAnimalLoader;
+	console.log(animal, 'awewa');
+
+	const [nameModal, setNameModal] = useState('');
+	const [isOpenModalLocal, setIsOpenModalLocal] = useState(false);
+
+	const setIsOpenModal = useGeneralStore(
+		state => state.setIsOpenModal
+	);
+	const isOpenModal = useGeneralStore(state => state.isOpenModal);
+	const produccionList = useProduccionStore(
+		state => state.produccionList
+	);
+
+	const onChangeModal = () => {
+		setIsOpenModal(true);
+	};
+
+	const onChangeModalLocal = (label: string) => {
+		setIsOpenModalLocal(true);
+		setNameModal(label);
+	};
+
+	return (
+		<div className='flex  flex-col gap-6 flex-1'>
+			<InfoHeaderAnimal
+				animal={animal}
+				onChangeModal={onChangeModal}
+				textLabel='Añadir Producción'
+				Icon={FaPlus}
+				color='secondaryGreen'
+			/>
+			<LayoutInfoAnimal title='Historial de Producción'>
+				{produccionList.length > 0 ? (
+					<div className='flex flex-col'>
+						{/* ROW TITLE */}
+						<div className='grid grid-cols-4 bg-purple80 py-4 rounded-[5px] px-6 items-center justify-center'>
+							{tableHeaders.map(header => (
+								<h4
+									className='font-bold text-white text-center'
+									key={header}
+								>
+									{header}
+								</h4>
+							))}
+						</div>
+						{produccionList.map((produccion, index) => (
+							<div
+								className={`grid grid-cols-4 ${
+									index % 2 === 0 ? 'bg-white' : 'bg-[#f9f9f9]'
+								} py-4 rounded-[5px] px-6 items-center `}
+								key={produccion.id}
+							>
+								<span className='font-bold text-center capitalize'>
+									{formatDateShort(produccion.fechaRegistro)}
+								</span>
+								<span className='font-bold text-center capitalize'>
+									1
+								</span>
+								<span className='font-bold text-center capitalize'>
+									{produccion.totalLitros}
+								</span>
+								<div className='flex gap-5 justify-center'>
+									<button
+										className='cursor-pointer'
+										onClick={() =>
+											onChangeModalLocal('editarProduccion')
+										}
+									>
+										<MdEdit
+											className='text-sky-500  transition-all'
+											size={25}
+										/>
+									</button>
+									<button className='cursor-pointer'>
+										<FaTrashAlt
+											className='text-red-500 transition-all'
+											size={25}
+										/>
+									</button>
+								</div>
+							</div>
+						))}
+					</div>
+				) : (
+					<div className='flex flex-col  justify-center p-8 gap-5'>
+						<h3 className='text-2xl font-bold '>
+							No hay registros de producción
+						</h3>
+						<p className='text-md text-primaryGray'>
+							Al momento de añadir un registro de producción se
+							mostrará aquí el historia.
+						</p>
+					</div>
+				)}
+			</LayoutInfoAnimal>
+
+			{isOpenModal && (
+				<ModalForm title='Agregar Producción'>
+					<AddProduccion animalById={animal} />
+				</ModalForm>
+			)}
+			{isOpenModalLocal && (
+				<ModalForm
+					title={nameModal ? 'Editar Producción' : ''}
+					setIsOpenModalLocal={setIsOpenModalLocal}
+				>
+					<EditProduccion animalById={animal} />
+				</ModalForm>
+			)}
+		</div>
+	);
+};

@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ********************************** */
+/*              SCROLLBAR             */
+/* ********************************** */
+/* width */
+::-webkit-scrollbar {
+	width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #ddd;
+	border-radius: 12px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #8b7294;
+	border-radius: 12px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #efe9f3;
+}
+
+/* En tu archivo CSS global o específico del componente */
+.no-select {
+	user-select: none;
+}
