@@ -26,6 +26,8 @@ export * from './shared/InputForm';
 export * from './shared/SelectForm';
 export * from './shared/ImageField';
 export * from './shared/InputDisabled';
+export * from './shared/ModalDelete';
+export * from './shared/AlertError';
 
 /* ********************************** */
 /*              ANIMALES              */

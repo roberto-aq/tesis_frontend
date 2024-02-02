@@ -1,11 +1,13 @@
 import { useLoaderData } from 'react-router-dom';
-import { ProduccionAnimalLoader } from '../interfaces';
+import {
+	ProduccionAnimalLoader,
+	ProduccionResponse,
+} from '../interfaces';
 import {
 	AddProduccion,
-	ButtonModal,
-	CardInfo,
 	EditProduccion,
 	InfoHeaderAnimal,
+	ModalDelete,
 	ModalForm,
 } from '../components';
 import { LayoutInfoAnimal } from '../components/animales/detalles/LayoutInfoAnimal';
@@ -26,26 +28,39 @@ const tableHeaders = [
 
 export const ProduccionDetailPage = () => {
 	const { animal } = useLoaderData() as ProduccionAnimalLoader;
-	console.log(animal, 'awewa');
 
-	const [nameModal, setNameModal] = useState('');
 	const [isOpenModalLocal, setIsOpenModalLocal] = useState(false);
+	const [selectedProduccion, setSelectedProduccion] =
+		useState<ProduccionResponse | null>(null);
 
+	const isOpenModal = useGeneralStore(state => state.isOpenModal);
 	const setIsOpenModal = useGeneralStore(
 		state => state.setIsOpenModal
 	);
-	const isOpenModal = useGeneralStore(state => state.isOpenModal);
+	const setModalError = useGeneralStore(state => state.setModalError);
+
 	const produccionList = useProduccionStore(
 		state => state.produccionList
+	);
+	const deleteProduccion = useProduccionStore(
+		state => state.deleteProduccion
 	);
 
 	const onChangeModal = () => {
 		setIsOpenModal(true);
 	};
 
-	const onChangeModalLocal = (label: string) => {
+	const onChangeModalLocal = (produccion: ProduccionResponse) => {
 		setIsOpenModalLocal(true);
-		setNameModal(label);
+		setSelectedProduccion(produccion);
+	};
+
+	const handleDelete = () => {
+		if (selectedProduccion) {
+			deleteProduccion(selectedProduccion.id, animal.id);
+			setModalError(false);
+		}
+		setModalError(false);
 	};
 
 	return (
@@ -90,16 +105,20 @@ export const ProduccionDetailPage = () => {
 								<div className='flex gap-5 justify-center'>
 									<button
 										className='cursor-pointer'
-										onClick={() =>
-											onChangeModalLocal('editarProduccion')
-										}
+										onClick={() => onChangeModalLocal(produccion)}
 									>
 										<MdEdit
 											className='text-sky-500  transition-all'
 											size={25}
 										/>
 									</button>
-									<button className='cursor-pointer'>
+									<button
+										className='cursor-pointer'
+										onClick={() => {
+											setModalError(true);
+											setSelectedProduccion(produccion);
+										}}
+									>
 										<FaTrashAlt
 											className='text-red-500 transition-all'
 											size={25}
@@ -129,12 +148,18 @@ export const ProduccionDetailPage = () => {
 			)}
 			{isOpenModalLocal && (
 				<ModalForm
-					title={nameModal ? 'Editar Producción' : ''}
+					title={'Editar Producción'}
 					setIsOpenModalLocal={setIsOpenModalLocal}
 				>
-					<EditProduccion animalById={animal} />
+					<EditProduccion
+						animalById={animal}
+						produccion={selectedProduccion}
+						setIsOpenModalLocal={setIsOpenModalLocal}
+					/>
 				</ModalForm>
 			)}
+
+			<ModalDelete handleDelete={handleDelete} />
 		</div>
 	);
 };

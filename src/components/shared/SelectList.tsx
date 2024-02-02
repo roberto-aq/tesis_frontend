@@ -15,6 +15,8 @@ export const SelectList: React.FC<SelectListProps> = ({
 }) => {
 	const navigate = useNavigate();
 	const [isOpen, setIsOpen] = useState(false);
+	const [searchInput, setSearchInput] = useState('');
+
 	const [selectedItem, setSelectedItem] = useState<Animal | null>(
 		null
 	);
@@ -28,16 +30,21 @@ export const SelectList: React.FC<SelectListProps> = ({
 		setSelectedItem(animal);
 		setIsOpen(false);
 		handleAnimalSelect(animal);
-		console.log(`Navigating to /reproduccion/${animal.id}`);
 		navigate(`${animal.id}`);
 	};
 
 	// Función para alternar la visibilidad del menú desplegable
 	const toggling = () => setIsOpen(!isOpen);
 
+	const handleSearchInput = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setSearchInput(e.target.value.trim());
+	};
+
 	useEffect(() => {
-		getAnimales(fincaId);
-	}, []);
+		getAnimales(fincaId, 1, 10, searchInput);
+	}, [searchInput]);
 
 	return (
 		<div className='w-full  max-w-2xl'>
@@ -63,6 +70,8 @@ export const SelectList: React.FC<SelectListProps> = ({
 								type='search'
 								placeholder='Buscar por número o nombre'
 								className=' outline-none  self-stretch w-full'
+								value={searchInput}
+								onChange={handleSearchInput}
 							/>
 						</div>
 						<div className='flex flex-col h-[250px] overflow-y-scroll'>

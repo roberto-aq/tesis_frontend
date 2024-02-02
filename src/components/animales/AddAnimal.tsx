@@ -30,7 +30,7 @@ export const AddAnimal = () => {
 		state => state.setIsOpenModal
 	);
 
-	const onSubmit = handleSubmit(async data => {
+	const onSubmit = handleSubmit(data => {
 		const animal: any = {
 			...data,
 			idEstadoReproductivo: +data.idEstadoReproductivo,
@@ -39,13 +39,8 @@ export const AddAnimal = () => {
 			madreId: data.madreId || null,
 		};
 
-		try {
-			await createAnimal(animal);
-			setIsOpenModal(false);
-			getAnimales(fincaId);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		createAnimal(animal);
+		setIsOpenModal(false);
 	});
 
 	return (
@@ -54,7 +49,7 @@ export const AddAnimal = () => {
 				className='flex flex-col gap-5  h-full'
 				onSubmit={onSubmit}
 			>
-				<div className='grid grid-cols-2 gap-8 gap-x-12 mr-1 mb-10 overflow-y-scroll h-[75%] px-5'>
+				<div className='grid grid-cols-2 gap-8 gap-x-12 mr-1 mb-10 overflow-auto h-[700px] px-5'>
 					{/* ROW 1 */}
 					<ImageField />
 					<div className='flex flex-col gap-5  justify-center'>

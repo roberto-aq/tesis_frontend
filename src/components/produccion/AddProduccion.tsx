@@ -1,17 +1,38 @@
-import React from 'react';
 import { InputForm } from '../shared/InputForm';
 import { useForm } from 'react-hook-form';
 import { ButtonAction } from '../shared/ButtonAction';
+import { Animal } from '../../interfaces';
+import { InputDisabled } from '../shared/InputDisabled';
+import { useProduccionStore } from '../../store/produccion/produccion.store';
+import { useGeneralStore } from '../../store';
 
-export const AddProduccion = () => {
+interface AddProduccionProps {
+	animalById: Animal;
+}
+
+export const AddProduccion: React.FC<AddProduccionProps> = ({
+	animalById,
+}) => {
 	const {
 		handleSubmit,
 		register,
 		formState: { errors },
 	} = useForm();
 
+	const createProduccion = useProduccionStore(
+		state => state.createProduccion
+	);
+	const setIsOpenModal = useGeneralStore(
+		state => state.setIsOpenModal
+	);
+
 	const onAddSubmit = handleSubmit(data => {
-		console.log(data);
+		const produccionDto: any = {
+			...data,
+			totalLitros: +data.totalLitros,
+		};
+		createProduccion(produccionDto, animalById.id);
+		setIsOpenModal(false);
 	});
 
 	return (
@@ -30,25 +51,19 @@ export const AddProduccion = () => {
 					required={true}
 				/>
 				<InputForm
-					label='Peso registrado'
-					placeholder='Ejm: 30kg'
-					name='peso'
+					label='Total de Litros'
+					placeholder='Ejm: 30ltrs'
+					name='totalLitros'
 					type='number'
 					register={register}
 					errors={errors}
 					required={true}
 				/>
-				<div className='col-span-2 '>
-					<InputForm
-						label='observaciones'
-						placeholder='Ejm: lorem500000'
-						name='observaciones'
-						type='text'
-						register={register}
-						errors={errors}
-						isTextarea={true}
-					/>
-				</div>
+				<InputDisabled
+					label='Días de Lactancia'
+					type='text'
+					value='20'
+				/>
 			</div>
 			<ButtonAction textLabel='Guardar' />
 		</form>

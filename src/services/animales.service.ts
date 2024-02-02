@@ -5,10 +5,15 @@ export class AnimalService {
 	/* ********************************** */
 	/*              ANIMALES              */
 	/* ********************************** */
-	static getAnimalesByFincaId = async (fincaId: string) => {
+	static getAnimalesByFincaId = async (
+		fincaId: string,
+		page: number,
+		limit: number,
+		searchTerm: string
+	) => {
 		try {
-			const { data } = await api.get<Animal[]>(
-				`/animal/finca/${fincaId}`
+			const { data } = await api.get(
+				`/animal/finca/${fincaId}?page=${page}&limit=${limit}&searchTerm=${searchTerm}`
 			);
 
 			return data;
@@ -123,7 +128,10 @@ export class AnimalService {
 			throw new Error(error.response.data.message);
 		}
 	};
-	static createSanidad = async (sanidad: Sanidad, animalId: string) => {
+	static createSanidad = async (
+		sanidad: Sanidad,
+		animalId: string
+	) => {
 		try {
 			const { data } = await api.post(
 				`/sanidad/${animalId}/observaciones/new`,

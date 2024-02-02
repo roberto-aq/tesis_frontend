@@ -1,5 +1,6 @@
 import { Outlet, useLoaderData, useNavigate } from 'react-router-dom';
 import {
+	AlertError,
 	ButtonModal,
 	DataHeader,
 	EditAnimal,
@@ -8,25 +9,32 @@ import {
 	SidebarDetailsAnimal,
 } from '../components';
 import { MdEdit } from 'react-icons/md';
-import { Animal } from '../interfaces';
+import { Animal, AnimalLoader } from '../interfaces';
 import { useGeneralStore } from '../store';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useAnimalesStore } from '../store/animales';
 import { useEffect } from 'react';
-import { animalLoaderData } from '../router/loaders/animalesLoader';
 
 export const AnimalDetailPage = () => {
-	const { animalInfo } = useLoaderData() as animalLoaderData;
+	const { animalInfo } = useLoaderData() as AnimalLoader;
 	const isOpenModal = useGeneralStore(state => state.isOpenModal);
 	const setIsOpenModal = useGeneralStore(
 		state => state.setIsOpenModal
 	);
+	const showAlertError = useGeneralStore(
+		state => state.showAlertError
+	);
+	const setShowAlertError = useGeneralStore(
+		state => state.setShowAlertError
+	);
+
 	const deleteAnimal = useAnimalesStore(state => state.deleteAnimal);
 	const getRazas = useAnimalesStore(state => state.getRazas);
 	const getGrupos = useAnimalesStore(state => state.getGrupos);
 	const getEstadosReproductivos = useAnimalesStore(
 		state => state.getEstadosReproductivos
 	);
+	const error = useAnimalesStore(state => state.error);
 	const navigate = useNavigate();
 	console.log({ animalInfo });
 
@@ -43,12 +51,11 @@ export const AnimalDetailPage = () => {
 	};
 
 	const onDeleteAnimal = async () => {
-		try {
-			await deleteAnimal(animalInfo.id);
-			navigate('/inicio/animales', { replace: true });
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		const success = await deleteAnimal(animalInfo.id);
+
+		if (success) navigate('/inicio/animales', { replace: true });
+
+		setShowAlertError(true);
 	};
 
 	return (
@@ -91,6 +98,8 @@ export const AnimalDetailPage = () => {
 					<EditAnimal animalById={animalInfo} />
 				</ModalForm>
 			)}
+
+			{showAlertError && error && <AlertError error={error} />}
 		</div>
 	);
 };

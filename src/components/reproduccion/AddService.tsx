@@ -6,11 +6,11 @@ import { useAnimalesStore } from '../../store/animales';
 import { MdOutlineClose } from 'react-icons/md';
 import { FaPlus } from 'react-icons/fa6';
 import { InputDisabled } from '../shared/InputDisabled';
-import { ReproduccionAnimalLoaderData } from '../../interfaces/loader.interface';
 import { diferenciasDias } from '../../helpers/formatDate';
+import { ReproduccionAnimalLoader } from '../../interfaces';
 
 interface AddServiceProps {
-	reproduccionAnimalInfo: ReproduccionAnimalLoaderData;
+	reproduccionAnimalInfo: ReproduccionAnimalLoader;
 }
 
 export const AddService: React.FC<AddServiceProps> = ({
