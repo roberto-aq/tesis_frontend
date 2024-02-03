@@ -47,6 +47,24 @@ export interface ProduccionResponse {
 	totalLitros: string;
 }
 
+export interface FincasResponse {
+	id: string;
+	nombre: string;
+	municipio: string;
+	propietario: string;
+	administrador: string;
+	veterinario: null;
+	areaTotal: number;
+	areaAprovechable: number;
+	forrajes: string;
+	riego: boolean;
+	fertilizacion: boolean;
+	numeroPotreros: null;
+	rotacion: null;
+	fecha_registro: string;
+	notas: null;
+}
+
 export interface Causa {
 	id: string;
 	descripcion: string;

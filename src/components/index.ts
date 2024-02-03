@@ -73,6 +73,7 @@ export * from './pesaje/EditPeso';
 /* ********************************** */
 export * from './produccion/AddProduccion';
 export * from './produccion/EditProduccion';
+export * from './produccion/ProduccionTable';
 
 /* ********************************** */
 /*              DESCARTE              */
