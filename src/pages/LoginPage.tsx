@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { InputFormAuth, SectionAuth } from '../components';
-import { useForm } from '../hooks/useForm';
 import { useAuthStore } from '../store';
+import { useForm } from 'react-hook-form';
 
 interface LoginFormState {
 	email: string;
@@ -27,26 +27,40 @@ const formValidations = {
 export const LoginPage = () => {
 	const navigate = useNavigate();
 
+	// const {
+	// 	email,
+	// 	password,
+	// 	onInputChange,
+	// 	isFormValid,
+	// 	...formValidation,
+	// } = useForm<LoginFormState>(initialForm, formValidations);
 	const {
-		email,
-		password,
-		onInputChange,
-		isFormValid,
-		...formValidation
-	} = useForm<LoginFormState>(initialForm, formValidations);
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
 
 	const loginUser = useAuthStore(state => state.loginUser);
 
-	const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
+	// const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+	// 	e.preventDefault();
 
+	// 	try {
+	// 		await loginUser(email, password);
+	// 		navigate('/inicio');
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 	}
+	// };
+
+	const onLogin = handleSubmit(async data => {
 		try {
-			await loginUser(email, password);
+			await loginUser(data.email, data.password);
 			navigate('/inicio');
 		} catch (error) {
 			console.log(error);
 		}
-	};
+	});
 
 	return (
 		<div className=' container bg-purple60 h-[700px] rounded-[15px]'>
@@ -63,18 +77,18 @@ export const LoginPage = () => {
 						label='Correo Electrónico'
 						name='email'
 						type='email'
-						value={email}
-						onChange={onInputChange}
+						register={register}
 						required={true}
+						errors={errors}
 					/>
 
 					<InputFormAuth
 						label='Contraseña'
 						name='password'
 						type='password'
-						value={password}
-						onChange={onInputChange}
+						register={register}
 						required={true}
+						errors={errors}
 					/>
 
 					<div className='flex flex-col gap-6 mt-5 items-center'>

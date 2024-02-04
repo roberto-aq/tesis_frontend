@@ -94,7 +94,7 @@ export const AnimalesPage = () => {
 					</div>
 					<div className='flex items-center gap-7'>
 						<span className='font-bold text-secondGray'>
-							{page} de {Math.ceil(totalAnimales / limit)}
+							{page} de {Math.ceil(totalAnimales / limit) || 1}
 						</span>
 						{/* PAGINACIÓN */}
 						<div className='flex gap-4 items-center'>
@@ -111,7 +111,10 @@ export const AnimalesPage = () => {
 							<button
 								className='border-2 border-secondaryGreen w-8 h-8 flex items-center justify-center rounded-full disabled:opacity-50 disabled:cursor-not-allowed'
 								onClick={handleNextPage}
-								disabled={page === Math.ceil(totalAnimales / limit)}
+								disabled={
+									page === Math.ceil(totalAnimales / limit) ||
+									totalAnimales === 0
+								}
 							>
 								<FaChevronRight
 									size={15}

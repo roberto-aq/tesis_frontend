@@ -1,6 +1,7 @@
 import { StateCreator, create } from 'zustand';
 import type {
 	AuthStatus,
+	RegisterUser,
 	User,
 } from '../../interfaces/auth.interface';
 import { AuthService } from '../../services/auth.service';
@@ -15,9 +16,12 @@ export interface AuthState {
 	error: string | null;
 
 	loginUser: (email: string, password: string) => Promise<void>;
+	registerUser: (usuario: RegisterUser) => Promise<void>;
 	checkAuthStatus: () => Promise<void>;
 	logoutUser: () => void;
 	clearError: () => void;
+	setFincaId: (id: string) => void;
+	setStatus: (status: AuthStatus) => void;
 }
 
 const storeApi: StateCreator<AuthState> = set => ({
@@ -46,6 +50,24 @@ const storeApi: StateCreator<AuthState> = set => ({
 				error: 'Credenciales incorrectas',
 			});
 			throw new Error('Acceso no autorizado');
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	registerUser: async usuario => {
+		try {
+			set({ isLoading: true, error: null });
+			const { token, ...user } = await AuthService.register(usuario);
+			set({ status: 'unauthorized', isLoading: false, token, user });
+		} catch (error) {
+			set({
+				status: 'unauthorized',
+				token: undefined,
+				user: undefined,
+				error: 'Error al registrar usuario',
+			});
+			throw new Error('Error al registrar usuario');
 		} finally {
 			set({ isLoading: false });
 		}
@@ -81,11 +103,19 @@ const storeApi: StateCreator<AuthState> = set => ({
 			token: undefined,
 			user: undefined,
 			isLoading: false,
+			fincaId: undefined,
 		});
 	},
 
 	clearError: () => {
 		set({ error: null });
+	},
+
+	setFincaId: id => {
+		set({ fincaId: id });
+	},
+	setStatus: status => {
+		set({ status });
 	},
 });
 

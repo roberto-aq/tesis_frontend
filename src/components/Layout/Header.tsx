@@ -1,20 +1,21 @@
-import { IoSettingsSharp } from 'react-icons/io5';
 import { CiBellOn } from 'react-icons/ci';
 import { FaBars } from 'react-icons/fa6';
 import { useAuthStore } from '../../store';
+import { SelectFincas } from '../shared/SelectFincas';
 
 export const Header = () => {
 	const user = useAuthStore(state => state.user);
+	console.log(user);
 
 	return (
 		<header className='flex bg-white py-3 px-10'>
-			<button className='flex-1 '>
-				<FaBars size={25} />
-			</button>
-			<div className='flex '>
-				<button className=' py-3  px-6 border-l-2'>
-					<IoSettingsSharp size={25} />
+			<div className='flex-1 flex '>
+				<button className=' px-2'>
+					<FaBars size={25} />
 				</button>
+			</div>
+			<div className='flex items-center'>
+				{user?.rol === 'administrador' && <SelectFincas />}
 				<button className=' py-3 px-6 border-l-2 border-r-2'>
 					<CiBellOn size={25} />
 				</button>

@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import { api } from '../api/vaquinnova.api';
+import { RegisterUser } from '../interfaces';
 
 export interface LoginResponse {
 	email: string;
@@ -43,6 +44,16 @@ export class AuthService {
 		} catch (error) {
 			console.log(error);
 			throw new Error('Unauthorized');
+		}
+	};
+
+	static register = async (usuario: RegisterUser) => {
+		try {
+			const { data } = await api.post('/auth/register', usuario);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
 		}
 	};
 }

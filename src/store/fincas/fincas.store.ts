@@ -1,6 +1,7 @@
 import { StateCreator, create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { FincasResponse } from '../../interfaces';
+import { FincasService } from '../../services/fincas.service';
 
 export interface FincaState {
 	fincas: FincasResponse[];
@@ -10,6 +11,7 @@ export interface FincaState {
 	setIsLoading: (value: boolean) => void;
 	setError: (value: string | null) => void;
 	getFincas: () => Promise<void>;
+	createFinca: (finca: FincasResponse) => Promise<FincasResponse>;
 }
 
 const storeApi: StateCreator<FincaState> = set => ({
@@ -23,12 +25,27 @@ const storeApi: StateCreator<FincaState> = set => ({
 	getFincas: async () => {
 		set({ isLoading: true });
 		try {
-			const response = await fetch('http://localhost:3000/fincas');
-			const data = await response.json();
+			const data = await FincasService.getFincas();
 			set({ fincas: data });
 		} catch (error: any) {
 			set({ error });
-			console.error(error);
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	createFinca: async (finca: FincasResponse) => {
+		set({ isLoading: true });
+		try {
+			const data = await FincasService.createFinca(finca);
+
+			set(state => ({
+				fincas: [...state.fincas, data],
+			}));
+
+			return data;
+		} catch (error: any) {
+			set({ error });
 		} finally {
 			set({ isLoading: false });
 		}

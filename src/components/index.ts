@@ -28,6 +28,7 @@ export * from './shared/ImageField';
 export * from './shared/InputDisabled';
 export * from './shared/ModalDelete';
 export * from './shared/AlertError';
+export * from './shared/SelectFincas';
 
 /* ********************************** */
 /*              ANIMALES              */

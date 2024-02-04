@@ -42,7 +42,7 @@ export const AnimalesTableList = () => {
 							>
 								<Link
 									to={`/inicio/animales/${animal.id}`}
-									className='font-bold text-center capitalize underline  hover:text-primaryGray'
+									className='font-bold text-center capitalize underline  hover:text-purple100'
 								>
 									{animal.nombre}
 								</Link>

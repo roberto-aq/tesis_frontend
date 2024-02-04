@@ -63,7 +63,7 @@ export const SelectList: React.FC<SelectListProps> = ({
 					</div>
 				</div>
 				{isOpen && (
-					<div className='absolute w-full bg-white rounded-[8px]  z-10 mt-2'>
+					<div className='absolute w-full bg-white rounded-[8px]  z-10 mt-2 shadow-xl'>
 						<div className='flex border-b border-[#BBB] px-4 py-2 gap-4'>
 							<MdSearch size={25} color='#BBB' />
 							<input
@@ -74,20 +74,28 @@ export const SelectList: React.FC<SelectListProps> = ({
 								onChange={handleSearchInput}
 							/>
 						</div>
-						<div className='flex flex-col h-[250px] overflow-y-scroll'>
-							{animales.map(animal => (
-								<div
-									className='px-8 py-5 hover:bg-gray-100 cursor-pointer flex gap-6 items-center'
-									onClick={onOptionClicked(animal)}
-									key={animal.id}
-								>
-									<div className='flex w-3 h-3 bg-[#808080] rounded-full'></div>
-									<span className='font-bold capitalize text-[#808080]'>
-										{animal.numeroIdentificador} - {animal.nombre}
-									</span>
-								</div>
-							))}
-						</div>
+						{animales.length > 0 ? (
+							<div className='flex flex-col h-[250px] overflow-y-scroll'>
+								{animales.map(animal => (
+									<div
+										className='px-8 py-5 hover:bg-gray-100 cursor-pointer flex gap-6 items-center'
+										onClick={onOptionClicked(animal)}
+										key={animal.id}
+									>
+										<div className='flex w-3 h-3 bg-[#808080] rounded-full'></div>
+										<span className='font-bold capitalize text-[#808080]'>
+											{animal.numeroIdentificador} - {animal.nombre}
+										</span>
+									</div>
+								))}
+							</div>
+						) : (
+							<div className='flex justify-center items-center h-[100px]'>
+								<p className='text-[#808080] font-bold'>
+									No hay resultados
+								</p>
+							</div>
+						)}
 					</div>
 				)}
 			</div>

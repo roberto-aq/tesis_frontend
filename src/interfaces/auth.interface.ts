@@ -6,3 +6,12 @@ export interface User {
 	activo: boolean;
 	rol: string;
 }
+
+export interface RegisterUser {
+	email: string;
+	password: string;
+	nombre: string;
+	apellidos: string;
+	telefono?: string;
+	direccion?: string;
+}

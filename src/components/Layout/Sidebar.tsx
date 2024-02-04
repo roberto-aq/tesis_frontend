@@ -2,6 +2,8 @@ import { NavLink } from 'react-router-dom';
 import LogoUtm from '../../assets/logoutm-sin-fondo.png';
 import { enlacesSidebar } from '../../data/enlaces';
 import { useAuthStore } from '../../store';
+import { IoLogOut } from 'react-icons/io5';
+import { IoMdLogOut } from 'react-icons/io';
 
 export const Sidebar = () => {
 	const logoutUser = useAuthStore(state => state.logoutUser);
@@ -36,8 +38,9 @@ export const Sidebar = () => {
 			</div>
 			<button
 				onClick={logoutUser}
-				className='flex border border-red-700 h-[50px] justify-center items-center rounded-lg cursor-pointer'
+				className='flex border gap-3 border-red-700 h-[50px] justify-center items-center rounded-lg cursor-pointer hover:bg-red-700 transition-all'
 			>
+				<IoMdLogOut size={20} className='text-white' />
 				<p className='text-white'>Cerrar Sesión</p>
 			</button>
 		</aside>
