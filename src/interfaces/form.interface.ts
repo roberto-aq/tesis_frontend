@@ -10,7 +10,13 @@ export interface InputFormProps {
 	name: string;
 	errors: FieldErrors<FieldValues>;
 	errorField?: FieldError | undefined;
-	type?: 'text' | 'email' | 'password' | 'number' | 'date';
+	type?:
+		| 'text'
+		| 'email'
+		| 'password'
+		| 'number'
+		| 'date'
+		| 'checkbox';
 	required?: boolean;
 	placeholder?: string;
 	register: UseFormRegister<FieldValues> | any;

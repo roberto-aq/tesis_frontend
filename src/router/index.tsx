@@ -16,6 +16,7 @@ import {
 	PesajeDetailPage,
 	DescarteDetailPage,
 	ProduccionDetailPage,
+	FincaDetailPage,
 } from '../pages';
 import {
 	AlimentacionAnimal,
@@ -31,6 +32,7 @@ import {
 	ProduccionAnimalLoader,
 	ReproduccionAnimalLoader,
 	AnimalLoader,
+	FincasResponse,
 } from '../interfaces';
 import {
 	animalesLoader,
@@ -39,6 +41,7 @@ import {
 	produccionAnimalLoader,
 	reproduccionAnimalLoader,
 } from './loaders';
+import { fincasLoader } from './loaders/fincasLoader';
 
 export const router = createBrowserRouter([
 	{
@@ -94,6 +97,16 @@ export const router = createBrowserRouter([
 						element: <FincasPage />,
 						handle: {
 							crumb: () => 'Fincas',
+						},
+					},
+					{
+						path: 'fincas/:id',
+						element: <FincaDetailPage />,
+						loader: fincasLoader,
+						handle: {
+							crumb: (data: FincasResponse) => {
+								return data.nombre;
+							},
 						},
 					},
 					{

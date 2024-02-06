@@ -65,6 +65,20 @@ export interface FincasResponse {
 	notas: null;
 }
 
+export interface UsuariosInactivos {
+	id: string;
+	email: string;
+	nombre: string;
+	apellidos: string;
+	telefono: null | string;
+	direccion: null | string;
+	rol: string;
+	activo: boolean;
+	fecha_creacion: string;
+	fecha_ultima_modificacion: string;
+	finca: FincasResponse | null;
+}
+
 export interface Causa {
 	id: string;
 	descripcion: string;

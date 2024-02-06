@@ -1,11 +1,10 @@
 import { LayoutInfoAnimal } from './LayoutInfoAnimal';
 import { CardInfo, Loader } from '../../../components';
 import { useOutletContext } from 'react-router-dom';
-import { Animal } from '../../../interfaces';
-import { animalLoaderData } from '../../../router/loaders/animalesLoader';
+import { Animal, AnimalLoader } from '../../../interfaces';
 
 export const DetailsAnimal = () => {
-	const { animalInfo } = useOutletContext<animalLoaderData>();
+	const { animalInfo } = useOutletContext<AnimalLoader>();
 
 	if (!animalInfo) return <Loader />;
 

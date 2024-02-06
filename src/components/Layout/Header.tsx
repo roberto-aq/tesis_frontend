@@ -14,18 +14,18 @@ export const Header = () => {
 					<FaBars size={25} />
 				</button>
 			</div>
-			<div className='flex items-center'>
+			<div className='flex items-center '>
 				{user?.rol === 'administrador' && <SelectFincas />}
 				<button className=' py-3 px-6 border-l-2 border-r-2'>
 					<CiBellOn size={25} />
 				</button>
-				<div className='flex gap-3 items-center ml-6'>
+				<div className='flex gap-3 items-center ml-6 '>
 					{/* Container Avatar */}
-					<div className='rounded-full overflow-hidden'>
+					<div className='rounded-full overflow-hidden w-[50px] h-[50px]'>
 						<img
 							src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
 							alt='Imagen Avatar'
-							className='w-[50px] h-[50px] object-contain'
+							className='w-[full] h-[full] object-contain'
 						/>
 					</div>
 					<div className='flex flex-col flex-1'>

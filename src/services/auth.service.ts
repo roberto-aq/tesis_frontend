@@ -56,4 +56,24 @@ export class AuthService {
 			throw new Error(error.response.data.message);
 		}
 	};
+
+	static getAllInactiveUsers = async () => {
+		try {
+			const { data } = await api.get('/auth/usuarios-inactivos');
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	};
+
+	static activateUser = async (id: string) => {
+		try {
+			const { data } = await api.patch(`/auth/usuario/${id}/activar`);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	};
 }

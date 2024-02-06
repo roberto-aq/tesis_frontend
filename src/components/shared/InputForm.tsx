@@ -15,7 +15,21 @@ export const InputForm: React.FC<InputFormProps> = ({
 }) => {
 	return (
 		<div className='flex flex-col gap-2 '>
-			<label className='font-bold capitalize text-sm'>{label}:</label>
+			<div className='flex justify-between items-center'>
+				<label className='font-bold capitalize text-sm'>
+					{label}:
+				</label>
+
+				<span
+					className={`${
+						required || type === 'checkbox'
+							? 'text-red-500 text-xl mr-3'
+							: 'text-purple80 text-xs'
+					} font-bold self-end`}
+				>
+					{required || type === 'checkbox' ? '*' : 'Opcional'}
+				</span>
+			</div>
 			<div
 				className={`flex ${
 					isTextarea ? 'h-[100px]' : 'h-[50px]'
@@ -47,6 +61,10 @@ export const InputForm: React.FC<InputFormProps> = ({
 						disabled={isDisabled}
 						className={`w-full bg-transparent outline-none  flex-1 font-bold py-2 ${
 							isDisabled ? 'text-purple100' : 'text-primaryGray'
+						} focus:outline-none ${
+							type === 'checkbox'
+								? 'h-5 w-5 accent-purple80 cursor-pointer'
+								: ''
 						}`}
 						{...register(name, {
 							required: required && {

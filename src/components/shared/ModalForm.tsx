@@ -12,7 +12,7 @@ export const ModalForm: React.FC<ModalFormProps> = ({
 	children,
 	title,
 	setIsOpenModalLocal,
-	height = '90%',
+	height = '95%',
 }) => {
 	const setIsOpenModal = useGeneralStore(
 		state => state.setIsOpenModal

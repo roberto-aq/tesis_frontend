@@ -2,10 +2,13 @@ export * from './AnimalDetailPage';
 export * from './AnimalesPage';
 export * from './DescarteDetailPage';
 export * from './DescartePage';
+export * from './FincaDetailPage';
 export * from './FincasPage';
 export * from './HomePage';
 export * from './LoginPage';
+export * from './NotActivatePage';
 export * from './NotFound';
+export * from './PerfilPage';
 export * from './PesajeDetailPage';
 export * from './PesajePage';
 export * from './ProduccionDetailPage';
@@ -13,4 +16,3 @@ export * from './ProduccionPage';
 export * from './RegisterPage';
 export * from './ReproduccionDetailPage';
 export * from './ReproduccionPage';
-export * from "./PerfilPage"

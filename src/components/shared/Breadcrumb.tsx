@@ -40,6 +40,12 @@ export const Breadcrumb = () => {
 								<span className='mx-2'>{'>'}</span>
 							</>
 						)}
+						{path.startsWith('/inicio/fincas/') && (
+							<>
+								<Link to='/inicio/fincas'>Fincas</Link>
+								<span className='mx-2'>{'>'}</span>
+							</>
+						)}
 						{path.startsWith('/inicio/reproduccion/') && (
 							<>
 								<Link to='/inicio/reproduccion'>Reproducción</Link>

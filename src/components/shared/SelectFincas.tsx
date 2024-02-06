@@ -4,7 +4,6 @@ import { useAuthStore } from '../../store';
 import { MdSearch } from 'react-icons/md';
 import { FaChevronDown } from 'react-icons/fa6';
 import { FincasResponse } from '../../interfaces';
-import { useNavigate } from 'react-router-dom';
 
 export const SelectFincas = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -12,24 +11,22 @@ export const SelectFincas = () => {
 	const [selectedItem, setSelectedItem] =
 		useState<FincasResponse | null>(null);
 
+	const selectedFinca = useAuthStore(state => state.selectedFinca);
+	const setSelectedFinca = useAuthStore(
+		state => state.setSelectedFinca
+	);
+
+	const isLoading = useFincasStore(state => state.isLoading);
 	const getFincas = useFincasStore(state => state.getFincas);
 	const fincas = useFincasStore(state => state.fincas);
 
 	const setFincaId = useAuthStore(state => state.setFincaId);
 
-	const [selectedFinca, setSelectedFinca] = useState(
-		fincas[0] || null
-	);
-
-	const handleFincaSelect = (finca: FincasResponse) => {
-		setSelectedFinca(finca);
-	};
-
 	const onOptionClicked = (finca: FincasResponse) => () => {
 		setSelectedItem(finca);
 		setIsOpen(false);
-		handleFincaSelect(finca);
 		setFincaId(finca.id);
+		setSelectedFinca(finca);
 	};
 
 	const toggling = () => setIsOpen(!isOpen);
@@ -41,12 +38,13 @@ export const SelectFincas = () => {
 	};
 
 	useEffect(() => {
-		getFincas();
-		// setFincaId(fincas[0]?.id);
-	}, []);
+		getFincas(1, 10, searchInput);
+	}, [getFincas]);
+
+	if (isLoading && !selectedItem) return <p>cargando...</p>;
 
 	return (
-		<div className='w-full  max-w-2xl mr-5'>
+		<div className='w-[300px] mr-5 '>
 			<div className='relative '>
 				<div className='flex flex-col gap-1'>
 					<p className='font-bold text-xs'>Finca seleccionada:</p>
@@ -55,8 +53,8 @@ export const SelectFincas = () => {
 						onClick={toggling}
 					>
 						<p className='font-bold text-secondGray'>
-							{selectedItem
-								? `${selectedItem.nombre}`
+							{selectedFinca
+								? `${selectedFinca.nombre}`
 								: 'Seleccione un finca'}
 						</p>
 						<div className='pointer-events-none flex items-center justify-center'>
@@ -65,7 +63,7 @@ export const SelectFincas = () => {
 					</div>
 				</div>
 				{isOpen && (
-					<div className='absolute w-full bg-white rounded-[8px]  z-10 mt-2'>
+					<div className='absolute w-full bg-white rounded-[8px]  z-10 mt-2 shadow-lg'>
 						<div className='flex border-b border-[#BBB] px-4 py-2 gap-4'>
 							<MdSearch size={25} color='#BBB' />
 							<input
@@ -76,7 +74,7 @@ export const SelectFincas = () => {
 								onChange={handleSearchInput}
 							/>
 						</div>
-						<div className='flex flex-col h-[250px] overflow-y-scroll'>
+						<div className='flex flex-col h-[180px] overflow-y-scroll'>
 							{fincas.map(finca => (
 								<div
 									className='px-8 py-5 hover:bg-gray-100 cursor-pointer flex gap-6 items-center'

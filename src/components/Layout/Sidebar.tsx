@@ -2,11 +2,12 @@ import { NavLink } from 'react-router-dom';
 import LogoUtm from '../../assets/logoutm-sin-fondo.png';
 import { enlacesSidebar } from '../../data/enlaces';
 import { useAuthStore } from '../../store';
-import { IoLogOut } from 'react-icons/io5';
 import { IoMdLogOut } from 'react-icons/io';
+import { GiFarmTractor } from 'react-icons/gi';
 
 export const Sidebar = () => {
 	const logoutUser = useAuthStore(state => state.logoutUser);
+	const user = useAuthStore(state => state.user);
 
 	return (
 		<aside className='w-[265px] bg-purple100 h-screen flex flex-col px-6 py-9 gap-6'>
@@ -19,22 +20,27 @@ export const Sidebar = () => {
 				<div className='border'></div>
 			</div>
 			<div className='flex flex-col gap-5 flex-1'>
-				{enlacesSidebar.map(({ ruta, texto, Icono }) => (
-					<NavLink
-						to={ruta}
-						end={ruta === ''}
-						key={texto}
-						className={({ isActive }) =>
+				{enlacesSidebar.map(({ ruta, texto, Icono }) => {
+					if (texto === 'Fincas' && user?.rol !== 'administrador')
+						return null;
+
+					return (
+						<NavLink
+							to={ruta}
+							end={ruta === ''}
+							key={texto}
+							className={({ isActive }) =>
+								`
+							text-white text-base font-bold h-[50px] rounded-lg flex items-center justify-start gap-3 px-8 ${
+								isActive ? 'bg-secondaryGreen' : ''
+							}
 							`
-                        text-white text-base font-bold h-[50px] rounded-lg flex items-center justify-start gap-3 px-8 ${
-													isActive ? 'bg-secondaryGreen' : ''
-												}
-                        `
-						}
-					>
-						<Icono className='mr-2' size={20} /> {texto}
-					</NavLink>
-				))}
+							}
+						>
+							<Icono className='mr-2' size={20} /> {texto}
+						</NavLink>
+					);
+				})}
 			</div>
 			<button
 				onClick={logoutUser}

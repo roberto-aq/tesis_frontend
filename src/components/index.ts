@@ -81,3 +81,13 @@ export * from './produccion/ProduccionTable';
 /* ********************************** */
 export * from './descarte/AddDescarte';
 export * from './descarte/EditDescarte';
+/* ********************************** */
+/*               FINCAS               */
+/* ********************************** */
+export * from './fincas/FincasTableList';
+export * from './fincas/TabSolicitudes';
+export * from './fincas/TabFincasList';
+export * from './fincas/AddFinca';
+export * from './fincas/EditFinca';
+export * from './fincas/ModalInfoFinca';
+export * from './fincas/CardContentInfo';

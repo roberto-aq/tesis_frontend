@@ -153,12 +153,12 @@ export const RegisterPage = () => {
 						onSubmit={onRegisterFinca}
 					>
 						<h2 className='text-purple80 font-bold text-[45px] text-center mt-32'>
-							Registrar newFinca
+							Registrar Finca
 						</h2>
 
 						<div className='grid grid-cols-2  h-full gap-4'>
 							<InputFormAuth
-								label='nombre de la newFinca'
+								label='nombre de la Finca'
 								name='nombre'
 								type='text'
 								register={register}

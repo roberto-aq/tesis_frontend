@@ -6,14 +6,17 @@ import type {
 } from '../../interfaces/auth.interface';
 import { AuthService } from '../../services/auth.service';
 import { devtools, persist } from 'zustand/middleware';
+import { FincasResponse, UsuariosInactivos } from '../../interfaces';
 
 export interface AuthState {
 	status: AuthStatus;
 	token?: string;
 	fincaId: string;
+	selectedFinca: FincasResponse | null;
 	user?: User;
 	isLoading: boolean;
 	error: string | null;
+	usuariosInactivos: UsuariosInactivos[];
 
 	loginUser: (email: string, password: string) => Promise<void>;
 	registerUser: (usuario: RegisterUser) => Promise<void>;
@@ -22,6 +25,8 @@ export interface AuthState {
 	clearError: () => void;
 	setFincaId: (id: string) => void;
 	setStatus: (status: AuthStatus) => void;
+	getAllInactiveUsers: () => Promise<void>;
+	setSelectedFinca: (finca: FincasResponse) => void;
 }
 
 const storeApi: StateCreator<AuthState> = set => ({
@@ -31,6 +36,8 @@ const storeApi: StateCreator<AuthState> = set => ({
 	isLoading: false,
 	error: null,
 	fincaId: '',
+	selectedFinca: null,
+	usuariosInactivos: [],
 
 	loginUser: async (email, password) => {
 		try {
@@ -116,6 +123,20 @@ const storeApi: StateCreator<AuthState> = set => ({
 	},
 	setStatus: status => {
 		set({ status });
+	},
+
+	getAllInactiveUsers: async () => {
+		try {
+			const usuariosInactivos =
+				await AuthService.getAllInactiveUsers();
+			set({ usuariosInactivos });
+		} catch (error: any) {
+			set({ error });
+		}
+	},
+
+	setSelectedFinca: finca => {
+		set({ selectedFinca: finca });
 	},
 });
 
