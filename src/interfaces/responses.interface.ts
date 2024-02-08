@@ -84,7 +84,7 @@ export interface Causa {
 	descripcion: string;
 }
 
-interface Parto {
+export interface Parto {
 	id: string;
 	fechaParto: string;
 	numeroParto: number;
@@ -96,7 +96,7 @@ interface Cria {
 	sexo: string;
 }
 
-interface Servicio {
+export interface Servicio {
 	id: string;
 	fechaServicio: string;
 	fechaCelo: string;

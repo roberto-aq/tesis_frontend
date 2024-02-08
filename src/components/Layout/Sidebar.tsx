@@ -3,7 +3,6 @@ import LogoUtm from '../../assets/logoutm-sin-fondo.png';
 import { enlacesSidebar } from '../../data/enlaces';
 import { useAuthStore } from '../../store';
 import { IoMdLogOut } from 'react-icons/io';
-import { GiFarmTractor } from 'react-icons/gi';
 
 export const Sidebar = () => {
 	const logoutUser = useAuthStore(state => state.logoutUser);

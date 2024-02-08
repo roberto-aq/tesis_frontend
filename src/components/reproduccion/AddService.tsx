@@ -8,6 +8,8 @@ import { FaPlus } from 'react-icons/fa6';
 import { InputDisabled } from '../shared/InputDisabled';
 import { diferenciasDias } from '../../helpers/formatDate';
 import { ReproduccionAnimalLoader } from '../../interfaces';
+import { useReproduccionStore } from '../../store/reproduccion';
+import { useGeneralStore } from '../../store';
 
 interface AddServiceProps {
 	reproduccionAnimalInfo: ReproduccionAnimalLoader;
@@ -31,7 +33,7 @@ export const AddService: React.FC<AddServiceProps> = ({
 				{
 					fechaServicio: '',
 					fechaCelo: '',
-					idEstadoReproductivo: '',
+					estadoReproductivoId: '',
 					numeroServicio: 1,
 				},
 			],
@@ -50,6 +52,14 @@ export const AddService: React.FC<AddServiceProps> = ({
 
 	const estadosReproductivos = useAnimalesStore(
 		state => state.estadosReproductivos
+	);
+
+	const setIsOpenModal = useGeneralStore(
+		state => state.setIsOpenModal
+	);
+
+	const createMultipleServicios = useReproduccionStore(
+		state => state.createMultipleServicios
 	);
 
 	const ultimoParto =
@@ -88,19 +98,23 @@ export const AddService: React.FC<AddServiceProps> = ({
 		append({
 			fechaServicio: '',
 			fechaCelo: '',
-			idEstadoReproductivo: '',
+			estadoReproductivoId: '',
 			numeroServicio: fields.length + 1,
 		});
 	};
 
 	const onAddSubmit = handleSubmit(data => {
-		const servicios = [
-			...data.servicios.map((servicio, index) => ({
-				...servicio,
-				numeroServicio: index + 1,
-			})),
-		];
-		console.log(servicios, '____________', data.servicios);
+		const servicios: any = {
+			servicios: [
+				...data.servicios.map((servicio, index) => ({
+					...servicio,
+					numeroServicio: index + 1,
+					estadoReproductivoId: +servicio.estadoReproductivoId,
+				})),
+			],
+		};
+		createMultipleServicios(animal.id, servicios);
+		setIsOpenModal(false);
 	});
 
 	return (
@@ -160,12 +174,12 @@ export const AddService: React.FC<AddServiceProps> = ({
 									label='Estado Reproductivo'
 									setValue={setValue}
 									register={register}
-									name={`servicios[${index}].idEstadoReproductivo`}
+									name={`servicios[${index}].estadoReproductivoId`}
 									errors={errors}
 									required={true}
 									errorField={
 										errors?.servicios?.[index]
-											?.idEstadoReproductivo || undefined
+											?.estadoReproductivoId || undefined
 									}
 								/>
 								<InputForm
@@ -189,7 +203,7 @@ export const AddService: React.FC<AddServiceProps> = ({
 														fechaUltimoParto,
 														watchServicios[index].fechaServicio
 												  ).toString()
-												: '-'
+												: 'No hay partos registrados'
 										}
 										type='text'
 									/>
@@ -209,13 +223,16 @@ export const AddService: React.FC<AddServiceProps> = ({
 									/>
 								)}
 							</div>
-							<span
-								className='text-purple100 font-bold cursor-pointer '
+							<button
+								className={`text-purple100 font-bold ${
+									fields.length === 1 ? 'cursor-not-allowed' : ''
+								}`}
 								// Para limpiar un servicio que se había registrado previamente antes de hacer la petición
 								onClick={() => onClearService(index)}
+								disabled={fields.length === 1}
 							>
 								<MdOutlineClose size={30} />
-							</span>
+							</button>
 						</div>
 					))}
 

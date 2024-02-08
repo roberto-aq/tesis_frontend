@@ -1,5 +1,6 @@
 import {
 	AddService,
+	EditService,
 	InfoHeaderAnimal,
 	LayoutInfoAnimal,
 	ModalForm,
@@ -10,11 +11,12 @@ import {
 import { useLoaderData } from 'react-router-dom';
 import { useGeneralStore } from '../store';
 import { FaPlus } from 'react-icons/fa';
-import { useState } from 'react';
-import { ReproduccionAnimalLoaderData } from '../interfaces/loader.interface';
+import { useEffect, useState } from 'react';
+import { ReproduccionAnimalLoader } from '../interfaces';
+import { useReproduccionStore } from '../store/reproduccion';
 
 export const ReproduccionDetailPage = () => {
-	const animalById = useLoaderData() as ReproduccionAnimalLoaderData;
+	const animalById = useLoaderData() as ReproduccionAnimalLoader;
 	// console.log(animalById);
 
 	const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -38,9 +40,21 @@ export const ReproduccionDetailPage = () => {
 	);
 	const isOpenModal = useGeneralStore(state => state.isOpenModal);
 
+	const servicios = useReproduccionStore(state => state.servicios);
+
+	const getServicios = useReproduccionStore(
+		state => state.getServicios
+	);
+
+	useEffect(() => {
+		getServicios(animalById.info.id);
+	}, []);
+
 	const onChangeModal = () => {
 		setIsOpenModal(true);
 	};
+
+	const [isModalEditOpen, setIsModalEditOpen] = useState(false);
 
 	console.log(animalById);
 
@@ -52,6 +66,9 @@ export const ReproduccionDetailPage = () => {
 				textLabel='Añadir Servicio'
 				Icon={FaPlus}
 				color='secondaryGreen'
+				hasEdit={servicios.length > 0}
+				textLabelEdit='Editar Servicios'
+				setIsModalEditOpen={setIsModalEditOpen}
 			/>
 			<LayoutInfoAnimal title='Reproducción'>
 				{/* MENÚ PESTAÑAS */}
@@ -76,6 +93,18 @@ export const ReproduccionDetailPage = () => {
 			{isOpenModal && (
 				<ModalForm title='Añadir Servicio'>
 					<AddService reproduccionAnimalInfo={animalById} />
+				</ModalForm>
+			)}
+
+			{isModalEditOpen && (
+				<ModalForm
+					title='Editar Servicios'
+					setIsOpenModalLocal={setIsModalEditOpen}
+				>
+					<EditService
+						animal={animalById.info}
+						setIsModalEditOpen={setIsModalEditOpen}
+					/>
 				</ModalForm>
 			)}
 		</div>

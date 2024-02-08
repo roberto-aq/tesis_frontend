@@ -34,7 +34,7 @@ export const LayoutUsuario = () => {
 			<Sidebar />
 			<div className='flex flex-1  flex-col'>
 				<Header />
-				<main className='py-7 px-10 flex-1 bg-primaryBackground flex flex-col '>
+				<main className='py-7 px-10 flex-1 bg-primaryBackground flex flex-col overflow-auto '>
 					<Breadcrumb />
 					<Outlet />
 				</main>

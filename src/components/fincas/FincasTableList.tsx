@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useFincasStore } from '../../store/fincas/fincas.store';
+import { Loader } from '../shared/Loader';
 
 const tableHeaders = [
 	'Nombre',
@@ -13,6 +14,8 @@ const tableHeaders = [
 export const FincasTableList = () => {
 	const fincas = useFincasStore(state => state.fincas);
 	const isLoading = useFincasStore(state => state.isLoading);
+
+	if (isLoading) return <Loader />;
 
 	return (
 		<div className='overflow-x-auto'>
@@ -28,13 +31,6 @@ export const FincasTableList = () => {
 						</h4>
 					))}
 				</div>
-				{isLoading && (
-					<div className='flex justify-center items-center h-28'>
-						<p className='text-xl font-bold text-primaryGray'>
-							Cargando...
-						</p>
-					</div>
-				)}
 				{fincas.length > 0 ? (
 					<>
 						{fincas.map((finca, index) => (

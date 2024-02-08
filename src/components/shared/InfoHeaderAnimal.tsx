@@ -4,6 +4,7 @@ import { DataHeader } from '../animales/DataHeader';
 import { ButtonModal } from './ButtonModal';
 import { useEffect, useState } from 'react';
 import { formatDate } from '../../helpers/formatDate';
+import { FaEdit } from 'react-icons/fa';
 
 interface infoHeaderAnimalProps {
 	animal: Animal;
@@ -11,6 +12,9 @@ interface infoHeaderAnimalProps {
 	textLabel: string;
 	Icon?: IconType;
 	color: string;
+	hasEdit?: boolean;
+	textLabelEdit?: string;
+	setIsModalEditOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const InfoHeaderAnimal: React.FC<infoHeaderAnimalProps> = ({
@@ -19,6 +23,9 @@ export const InfoHeaderAnimal: React.FC<infoHeaderAnimalProps> = ({
 	textLabel,
 	Icon,
 	color,
+	hasEdit,
+	textLabelEdit,
+	setIsModalEditOpen,
 }) => {
 	const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -40,12 +47,23 @@ export const InfoHeaderAnimal: React.FC<infoHeaderAnimalProps> = ({
 						#{animal.numeroIdentificador}
 					</h3>
 					<div className='flex  h-[45px]'>
-						<ButtonModal
-							textLabel={textLabel}
-							color={color}
-							Icon={Icon}
-							onClick={onChangeModal}
-						/>
+						{hasEdit ? (
+							<ButtonModal
+								textLabel={textLabelEdit || 'Editar'}
+								color='blueEdit'
+								Icon={FaEdit}
+								onClick={() =>
+									setIsModalEditOpen && setIsModalEditOpen(true)
+								}
+							/>
+						) : (
+							<ButtonModal
+								textLabel={textLabel}
+								color={color}
+								Icon={Icon}
+								onClick={onChangeModal}
+							/>
+						)}
 					</div>
 				</div>
 				<div className='flex justify-between items-center'>
