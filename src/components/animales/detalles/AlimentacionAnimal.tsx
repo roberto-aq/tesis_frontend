@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { LayoutInfoAnimal } from './LayoutInfoAnimal';
 import {
 	AddAlimentacion,
 	CardInfo,
 	EditAlimentacion,
 	Loader,
+	ModalDelete,
 	ModalForm,
 } from '../../../components';
 import { MdEdit } from 'react-icons/md';
@@ -13,8 +14,9 @@ import { IoChevronBack } from 'react-icons/io5';
 import { ButtonModal } from '../../shared/ButtonModal';
 import { useOutletContext } from 'react-router-dom';
 import { Alimentacion, AnimalLoader } from '../../../interfaces';
-import { formatDateShort } from '../../../helpers/formatDate';
+import { formatearFecha } from '../../../helpers/formatDate';
 import { useAnimalesStore } from '../../../store/animales';
+import { useGeneralStore } from '../../../store/general/general.store';
 
 const tableHeaders = [
 	'Fecha de registro',
@@ -29,6 +31,8 @@ export const AlimentacionAnimal = () => {
 	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [selectedAlimentacion, setSelectedAlimentacion] =
 		useState<Alimentacion | null>(null);
+
+	const setModalError = useGeneralStore(state => state.setModalError);
 
 	const alimentacionAnimal = useAnimalesStore(
 		state => state.alimentacion
@@ -49,15 +53,9 @@ export const AlimentacionAnimal = () => {
 	};
 
 	const onDelete = async () => {
-		try {
-			await deleteAlimentacion(
-				selectedAlimentacion!.id,
-				animalInfo.id
-			);
-			handleSelectAlimentacion(null);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		await deleteAlimentacion(selectedAlimentacion!.id, animalInfo.id);
+		handleSelectAlimentacion(null);
+		setModalError(false);
 	};
 
 	if (!alimentacionAnimal) return <Loader />;
@@ -114,12 +112,16 @@ export const AlimentacionAnimal = () => {
 							key={alimentacion.id}
 						>
 							<span className='font-bold text-center'>
-								{formatDateShort(alimentacion.fechaRegistro)}
+								{formatearFecha(alimentacion.fechaRegistro)}
 							</span>
 							<span className='font-bold text-center capitalize'>
 								{alimentacion.cantidad}
 							</span>
-							<span className='font-bold  capitalize  whitespace-normal overflow-hidden break-words'>
+							<span
+								className={`font-bold  capitalize  whitespace-normal overflow-hidden break-words ${
+									alimentacion.observaciones ? '' : 'text-center'
+								}`}
+							>
 								{alimentacion.observaciones
 									? alimentacion.observaciones.length > 50
 										? alimentacion.observaciones.slice(0, 50) + '...'
@@ -149,12 +151,12 @@ export const AlimentacionAnimal = () => {
 						/>
 						<CardInfo
 							title='Fecha de Registro de suplemento'
-							content={formatDateShort(
+							content={formatearFecha(
 								selectedAlimentacion.fechaRegistro
 							)}
 							tooltipText='Fecha que se le dió el suplemento al animal'
 						/>
-						<div className='col-span-2'>
+						<div className='col-span-2 '>
 							<CardInfo
 								title='Observaciones'
 								content={
@@ -179,7 +181,7 @@ export const AlimentacionAnimal = () => {
 						</button>
 						<button
 							className=' flex gap-2 items-center rounded-lg py-2 px-6 text-white bg-red-500 hover:bg-red-600 transition-all  font-bold text-sm'
-							onClick={onDelete}
+							onClick={() => setModalError(true)}
 						>
 							<FaTrashAlt
 								className='text-white  transition-all'
@@ -211,6 +213,8 @@ export const AlimentacionAnimal = () => {
 					)}
 				</ModalForm>
 			)}
+
+			<ModalDelete handleDelete={onDelete} />
 		</LayoutInfoAnimal>
 	);
 };

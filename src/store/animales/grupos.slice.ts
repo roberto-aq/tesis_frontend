@@ -21,7 +21,7 @@ export const createGruposSlice: StateCreator<GruposSlice> = set => ({
 			const grupos = await AnimalService.getGrupos();
 			set({ grupos });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}

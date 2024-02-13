@@ -22,17 +22,19 @@ export const AddSanidad: React.FC<AddSanidadProps> = ({
 	const createSanidad = useAnimalesStore(
 		state => state.createSanidad
 	);
+	const sanidad = useAnimalesStore(state => state.sanidad);
+
+	const minDate =
+		sanidad.length > 0
+			? sanidad[sanidad.length - 1].fechaRegistro
+			: animalById.fechaNacimiento;
 
 	const onAddSubmit = handleSubmit(async data => {
 		const sanidad: any = {
 			...data,
 		};
-		try {
-			await createSanidad(sanidad, animalById.id);
-			setIsOpenModalLocal(false);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		await createSanidad(sanidad, animalById.id);
+		setIsOpenModalLocal(false);
 	});
 
 	return (
@@ -50,6 +52,7 @@ export const AddSanidad: React.FC<AddSanidadProps> = ({
 						register={register}
 						errors={errors}
 						required={true}
+						minDate={minDate}
 					/>
 				</div>
 				<div className='col-span-2 '>

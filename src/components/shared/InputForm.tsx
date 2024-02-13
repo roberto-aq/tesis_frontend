@@ -13,6 +13,7 @@ export const InputForm: React.FC<InputFormProps> = ({
 	errorField,
 	onChange,
 	minDate,
+	maxDate,
 }) => {
 	return (
 		<div className='flex flex-col gap-2 '>
@@ -64,6 +65,7 @@ export const InputForm: React.FC<InputFormProps> = ({
 								? '0'
 								: undefined
 						}
+						max={type === 'date' ? maxDate : undefined}
 						placeholder={placeholder}
 						disabled={isDisabled}
 						className={`w-full bg-transparent outline-none  flex-1 font-bold py-2 ${

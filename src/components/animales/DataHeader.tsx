@@ -1,3 +1,4 @@
+import { formatearFecha } from '../../helpers/formatDate';
 import { Animal } from '../../interfaces';
 
 interface DataHeaderProps {
@@ -14,7 +15,7 @@ export const DataHeader: React.FC<DataHeaderProps> = ({ animal }) => {
 		{ nameHeader: 'Grupo', valueHeader: animal.grupo.descripcion },
 		{
 			nameHeader: 'Fecha de nacimiento',
-			valueHeader: animal.fechaNacimiento,
+			valueHeader: formatearFecha(animal.fechaNacimiento),
 		},
 		{ nameHeader: 'Sexo', valueHeader: animal.sexo },
 	];
@@ -31,7 +32,7 @@ export const DataHeader: React.FC<DataHeaderProps> = ({ animal }) => {
 					<span className='font-bold text-xs text-primaryGray'>
 						{header.nameHeader}
 					</span>
-					<span className='font-bold text-sm'>
+					<span className='font-bold text-sm capitalize'>
 						{header.valueHeader}
 					</span>
 				</div>

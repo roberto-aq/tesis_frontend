@@ -8,6 +8,7 @@ export const animalesLoader = async ({
 }: LoaderFunctionArgs): Promise<AnimalLoader | null> => {
 	if (!params.id) return null;
 	const animal = await AnimalService.getAnimalById(params.id);
+	await useAnimalesStore.getState().getAnimalById(params.id);
 	// const alimentacion = await AnimalService.getAlimentacionByAnimal(
 	// 	params.id
 	// );

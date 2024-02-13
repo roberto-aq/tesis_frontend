@@ -30,7 +30,6 @@ export const EditAnimal: React.FC<EditAnimalProps> = ({
 	);
 	const fincaId = useAuthStore(state => state.fincaId);
 	const updateAnimal = useAnimalesStore(state => state.updateAnimal);
-	const error = useAnimalesStore(state => state.error);
 
 	const grupos = useAnimalesStore(state => state.grupos);
 	const razas = useAnimalesStore(state => state.razas);
@@ -41,6 +40,8 @@ export const EditAnimal: React.FC<EditAnimalProps> = ({
 	const setIsOpenModal = useGeneralStore(
 		state => state.setIsOpenModal
 	);
+
+	const today = new Date().toISOString().split('T')[0];
 
 	useEffect(() => {
 		if (animalById) {
@@ -62,7 +63,6 @@ export const EditAnimal: React.FC<EditAnimalProps> = ({
 
 	useEffect(() => {
 		getAnimales(fincaId);
-		console.log(animalById);
 	}, []);
 
 	const onEditAnimal = handleSubmit(async data => {
@@ -72,14 +72,9 @@ export const EditAnimal: React.FC<EditAnimalProps> = ({
 			idEstadoReproductivo: +data.idEstadoReproductivo,
 		};
 
-		try {
-			await updateAnimal(animal, animalById.id);
-			setIsOpenModal(false);
-			getAnimalById(animalById.id);
-			console.log(animalById);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		await updateAnimal(animal, animalById.id);
+		setIsOpenModal(false);
+		await getAnimalById(animalById.id);
 	});
 
 	return (
@@ -119,6 +114,7 @@ export const EditAnimal: React.FC<EditAnimalProps> = ({
 						register={register}
 						errors={errors}
 						required={true}
+						maxDate={today}
 					/>
 					<SelectForm
 						label='Sexo'
@@ -182,7 +178,9 @@ export const EditAnimal: React.FC<EditAnimalProps> = ({
 				{/* ROW 4 */}
 				<div className='flex flex-col gap-5'>
 					<SelectForm
-						items={animales}
+						items={animales.filter(
+							animal => animal.id !== animalById.id
+						)}
 						label='Madre'
 						setValue={setValue}
 						register={register}

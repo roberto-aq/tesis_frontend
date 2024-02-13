@@ -38,7 +38,7 @@ export const createSanidadSlice: StateCreator<
 			const data = await AnimalService.getSanidad(animalId);
 			set({ sanidad: data });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -54,7 +54,7 @@ export const createSanidadSlice: StateCreator<
 			);
 			set({ sanidadById: data });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -71,7 +71,7 @@ export const createSanidadSlice: StateCreator<
 				sanidad: [...state.sanidad, newSanidad],
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -91,7 +91,7 @@ export const createSanidadSlice: StateCreator<
 				),
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -106,7 +106,7 @@ export const createSanidadSlice: StateCreator<
 				sanidad: state.sanidad.filter(sanidad => sanidad.id !== id),
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}

@@ -10,18 +10,24 @@ import { IoChevronBack } from 'react-icons/io5';
 import { AddSanidad } from './AddSanidad';
 import { EditSanidad } from './EditSanidad';
 import { useOutletContext } from 'react-router-dom';
-import { animalLoaderData } from '../../../router/loaders/animalesLoader';
-import { Sanidad } from '../../../interfaces';
-import { formatDateShort } from '../../../helpers/formatDate';
+import { AnimalLoader, Sanidad } from '../../../interfaces';
+import {
+	formatDateShort,
+	formatearFecha,
+} from '../../../helpers/formatDate';
 import { useAnimalesStore } from '../../../store/animales';
+import { useGeneralStore } from '../../../store';
+import { ModalDelete } from '../../shared/ModalDelete';
 
 const tableHeaders = ['Fecha de registro', 'Observaciones'];
 
 export const SanidadAnimal = () => {
-	const { animalInfo } = useOutletContext<animalLoaderData>();
+	const { animalInfo } = useOutletContext<AnimalLoader>();
 
 	const [nameModal, setNameModal] = useState('');
 	const [isOpenModal, setIsOpenModal] = useState(false);
+
+	const setModalError = useGeneralStore(state => state.setModalError);
 
 	const sanidad = useAnimalesStore(state => state.sanidad);
 	const deleteSanidad = useAnimalesStore(
@@ -40,12 +46,9 @@ export const SanidadAnimal = () => {
 	};
 
 	const onDelete = async () => {
-		try {
-			await deleteSanidad(selectedSanidad!.id, animalInfo.id);
-			handleSelectSanidad(null);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		await deleteSanidad(selectedSanidad!.id, animalInfo.id);
+		handleSelectSanidad(null);
+		setModalError(false);
 	};
 
 	return (
@@ -98,8 +101,8 @@ export const SanidadAnimal = () => {
 							onClick={() => handleSelectSanidad(sanidad)}
 							key={sanidad.id}
 						>
-							<span className='font-bold  capitalize'>
-								{formatDateShort(sanidad.fechaRegistro)}
+							<span className='font-bold  capitalize text-center'>
+								{formatearFecha(sanidad.fechaRegistro)}
 							</span>
 							<span className='font-bold  capitalize  whitespace-normal overflow-hidden break-words'>
 								{sanidad.observaciones
@@ -127,7 +130,7 @@ export const SanidadAnimal = () => {
 					<div className='grid grid-cols-2 gap-5 p-8'>
 						<CardInfo
 							title='Fecha de registro de observación'
-							content={formatDateShort(selectedSanidad.fechaRegistro)}
+							content={formatearFecha(selectedSanidad.fechaRegistro)}
 							tooltipText='Fecha que se registró la observación de sanidad del animal'
 						/>
 						<div className='col-span-2'>
@@ -155,7 +158,7 @@ export const SanidadAnimal = () => {
 						</button>
 						<button
 							className=' flex gap-2 items-center rounded-lg py-2 px-6 text-white bg-red-500 hover:bg-red-600 transition-all  font-bold text-sm'
-							onClick={onDelete}
+							onClick={() => setModalError(true)}
 						>
 							<FaTrashAlt
 								className='text-white  transition-all'
@@ -187,6 +190,8 @@ export const SanidadAnimal = () => {
 					)}
 				</ModalForm>
 			)}
+
+			<ModalDelete handleDelete={onDelete} />
 		</LayoutInfoAnimal>
 	);
 };

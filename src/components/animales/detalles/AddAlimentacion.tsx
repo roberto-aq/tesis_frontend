@@ -22,18 +22,23 @@ export const AddAlimentacion: React.FC<AddAlimentacionProps> = ({
 	const createAlimentacion = useAnimalesStore(
 		state => state.createAlimentacion
 	);
+	const alimentaciones = useAnimalesStore(
+		state => state.alimentacion
+	);
 
-	const onAddSubmit = handleSubmit(async data => {
+	const minDate =
+		alimentaciones.length > 0
+			? alimentaciones[0].fechaRegistro
+			: animalById.fechaNacimiento;
+
+	const onAddSubmit = handleSubmit(data => {
 		const alimentacion: any = {
 			...data,
 			cantidad: +data.cantidad,
 		};
-		try {
-			await createAlimentacion(alimentacion, animalById.id);
-			setIsOpenModalLocal(false);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+
+		createAlimentacion(alimentacion, animalById.id);
+		setIsOpenModalLocal(false);
 	});
 
 	return (
@@ -44,12 +49,12 @@ export const AddAlimentacion: React.FC<AddAlimentacionProps> = ({
 			<div className='grid grid-cols-2 gap-8 gap-x-12 mr-1 mb-10 overflow-auto h-[75%] px-5'>
 				<InputForm
 					label='fecha de registro'
-					placeholder='Ejm: Lulu'
 					name='fechaRegistro'
 					type='date'
 					register={register}
 					errors={errors}
 					required={true}
+					minDate={minDate}
 				/>
 				<InputForm
 					label='cantidad (kg)'

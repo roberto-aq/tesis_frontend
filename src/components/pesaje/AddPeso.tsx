@@ -20,7 +20,13 @@ export const AddPeso: React.FC<AddPesoProps> = ({ animalById }) => {
 	const setIsOpenModal = useGeneralStore(
 		state => state.setIsOpenModal
 	);
+	const pesos = usePesajeStore(state => state.pesos);
 
+	const minDate =
+		pesos.length > 0
+			? pesos[pesos.length - 1].fechaRegistro
+			: animalById.fechaNacimiento;
+ 
 	const onAddSubmit = handleSubmit(async data => {
 		const peso: any = {
 			...data,
@@ -45,6 +51,7 @@ export const AddPeso: React.FC<AddPesoProps> = ({ animalById }) => {
 					register={register}
 					errors={errors}
 					required={true}
+					minDate={minDate}
 				/>
 				<InputForm
 					label='Peso registrado'

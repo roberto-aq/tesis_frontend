@@ -30,22 +30,43 @@ export const EditAlimentacion: React.FC<EditAlimentacionProps> = ({
 	const updateAlimentacion = useAnimalesStore(
 		state => state.updateAlimentacion
 	);
+	const alimentaciones = useAnimalesStore(
+		state => state.alimentacion
+	);
+
+	const alimentacionesOrdenadas = [...alimentaciones].sort(
+		(a, b) =>
+			new Date(a.fechaRegistro).getTime() -
+			new Date(b.fechaRegistro).getTime()
+	);
+
+	const indiceActual = alimentacionesOrdenadas.findIndex(
+		alimentacion => alimentacion.id === alimentacionAnimal?.id
+	);
+
+	// Encuentra la fecha mínima (del registro anterior, si existe)
+	const fechaMin =
+		indiceActual > 0
+			? alimentacionesOrdenadas[indiceActual - 1].fechaRegistro
+			: animalById.fechaNacimiento;
+
+	// Encuentra la fecha máxima (del registro siguiente, si existe)
+	const fechaMax =
+		indiceActual < alimentacionesOrdenadas.length - 1
+			? alimentacionesOrdenadas[indiceActual + 1].fechaRegistro
+			: undefined;
 
 	const onEditSubmit = handleSubmit(async data => {
-		console.log(data);
 		const alimentacion: any = {
 			...data,
 			cantidad: +data.cantidad,
 		};
-		try {
-			await updateAlimentacion(
-				alimentacion,
-				animalById.id,
-				alimentacionAnimal!.id
-			);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		await updateAlimentacion(
+			alimentacion,
+			animalById.id,
+			alimentacionAnimal!.id
+		);
+
 		setIsOpenModalLocal(false);
 		setSelectedAlimentacion(null);
 	});
@@ -74,6 +95,8 @@ export const EditAlimentacion: React.FC<EditAlimentacionProps> = ({
 					register={register}
 					errors={errors}
 					required={true}
+					minDate={fechaMin}
+					maxDate={fechaMax}
 				/>
 				<InputForm
 					label='cantidad (kg)'

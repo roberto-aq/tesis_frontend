@@ -48,8 +48,7 @@ const storeApi: StateCreator<DescarteState> = set => ({
 				set({ descarte: null }); // Manejar el caso de null
 			}
 		} catch (error: any) {
-			console.log(error.response.data);
-			throw new Error(error.response.data.message);
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -66,8 +65,9 @@ const storeApi: StateCreator<DescarteState> = set => ({
 			);
 			set({ descarte: data });
 		} catch (error: any) {
-			set({ error });
-			throw new Error(error.response.data.message);
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
 		}
 	},
 	updateDescarte: async (
@@ -84,8 +84,7 @@ const storeApi: StateCreator<DescarteState> = set => ({
 			);
 			set({ descarte: data });
 		} catch (error: any) {
-			set({ error });
-			throw new Error(error.response.data.message);
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -97,8 +96,7 @@ const storeApi: StateCreator<DescarteState> = set => ({
 			await DescarteService.deleteDescarte(animalId);
 			set({ descarte: null });
 		} catch (error: any) {
-			set({ error });
-			throw new Error(error.response.data.message);
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -109,8 +107,9 @@ const storeApi: StateCreator<DescarteState> = set => ({
 			const data = await DescarteService.getCausasGenerales();
 			set({ causasGenerales: data });
 		} catch (error: any) {
-			set({ error });
-			throw new Error(error.response.data.message);
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
 		}
 	},
 	// Causas Específicas
@@ -124,8 +123,9 @@ const storeApi: StateCreator<DescarteState> = set => ({
 				);
 			set({ causasEspecificasFiltradas: data });
 		} catch (error: any) {
-			set({ error });
-			throw new Error(error.response.data.message);
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
 		}
 	},
 });

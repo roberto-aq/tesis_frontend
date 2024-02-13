@@ -43,7 +43,7 @@ export const SelectList: React.FC<SelectListProps> = ({
 	};
 
 	useEffect(() => {
-		getAnimales(fincaId, 1, 10, searchInput);
+		getAnimales(fincaId, 1, 1000, searchInput);
 	}, [searchInput]);
 
 	return (

@@ -21,7 +21,7 @@ export const createRazasSlice: StateCreator<RazasSlice> = set => ({
 			const razas = await AnimalService.getRazas();
 			set({ razas });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}

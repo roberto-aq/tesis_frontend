@@ -25,7 +25,7 @@ export const createEstadosReproductivosSlice: StateCreator<
 				await AnimalService.getEstadosReproductivos();
 			set({ estadosReproductivos });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}

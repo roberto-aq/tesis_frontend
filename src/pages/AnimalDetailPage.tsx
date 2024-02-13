@@ -9,14 +9,13 @@ import {
 	SidebarDetailsAnimal,
 } from '../components';
 import { MdEdit } from 'react-icons/md';
-import { Animal, AnimalLoader } from '../interfaces';
 import { useGeneralStore } from '../store';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useAnimalesStore } from '../store/animales';
 import { useEffect } from 'react';
 
 export const AnimalDetailPage = () => {
-	const { animalInfo } = useLoaderData() as AnimalLoader;
+	const animalInfo = useAnimalesStore(state => state.animalById);
 	const isOpenModal = useGeneralStore(state => state.isOpenModal);
 	const setIsOpenModal = useGeneralStore(
 		state => state.setIsOpenModal
@@ -36,7 +35,6 @@ export const AnimalDetailPage = () => {
 	);
 	const error = useAnimalesStore(state => state.error);
 	const navigate = useNavigate();
-	console.log({ animalInfo });
 
 	useEffect(() => {
 		getRazas();

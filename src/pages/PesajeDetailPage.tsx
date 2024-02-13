@@ -16,7 +16,6 @@ import { PesajeAnimalLoader } from '../interfaces';
 
 export const PesajeDetailPage = () => {
 	const animalById = useLoaderData() as PesajeAnimalLoader;
-	console.log(animalById);
 
 	const [activeTabIndex, setActiveTabIndex] = useState(0);
 

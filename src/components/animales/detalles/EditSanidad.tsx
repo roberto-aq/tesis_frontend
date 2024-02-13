@@ -30,21 +30,40 @@ export const EditSanidad: React.FC<EditSanidadProps> = ({
 	const updateSanidad = useAnimalesStore(
 		state => state.updateSanidad
 	);
+	const sanidad = useAnimalesStore(state => state.sanidad);
+
+	const sanidadOrdenadas = [...sanidad].sort(
+		(a, b) =>
+			new Date(a.fechaRegistro).getTime() -
+			new Date(b.fechaRegistro).getTime()
+	);
+
+	const indiceActual = sanidadOrdenadas.findIndex(
+		sanidad => sanidad.id === sanidadAnimal?.id
+	);
+
+	// Encuentra la fecha mínima (del registro anterior, si existe)
+	const fechaMin =
+		indiceActual > 0
+			? sanidadOrdenadas[indiceActual - 1].fechaRegistro
+			: animalById.fechaNacimiento;
+
+	// Encuentra la fecha máxima (del registro siguiente, si existe)
+	const fechaMax =
+		indiceActual < sanidadOrdenadas.length - 1
+			? sanidadOrdenadas[indiceActual + 1].fechaRegistro
+			: undefined;
 
 	const onEditSubmit = handleSubmit(async data => {
-		console.log(data);
 		const alimentacion: any = {
 			...data,
 		};
-		try {
-			await updateSanidad(
-				alimentacion,
-				animalById.id,
-				sanidadAnimal!.id
-			);
-		} catch (error: any) {
-			throw new Error(error);
-		}
+		await updateSanidad(
+			alimentacion,
+			animalById.id,
+			sanidadAnimal!.id
+		);
+
 		setIsOpenModalLocal(false);
 		setSelectedSanidad(null);
 	});
@@ -73,6 +92,8 @@ export const EditSanidad: React.FC<EditSanidadProps> = ({
 						register={register}
 						errors={errors}
 						required={true}
+						minDate={fechaMin}
+						maxDate={fechaMax}
 					/>
 				</div>
 				<div className='col-span-2 '>

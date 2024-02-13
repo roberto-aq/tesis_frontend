@@ -23,12 +23,14 @@ export const AddAnimal = () => {
 	const grupos = useAnimalesStore(state => state.grupos);
 	const animales = useAnimalesStore(state => state.animales);
 	const createAnimal = useAnimalesStore(state => state.createAnimal);
-	const getAnimales = useAnimalesStore(state => state.getAnimales);
 
 	const fincaId = useAuthStore(state => state.fincaId);
 	const setIsOpenModal = useGeneralStore(
 		state => state.setIsOpenModal
 	);
+
+	// Calcula la fecha actual en formato YYYY-MM-DD para validar la fecha de nacimiento
+	const today = new Date().toISOString().split('T')[0];
 
 	const onSubmit = handleSubmit(data => {
 		const animal: any = {
@@ -81,6 +83,7 @@ export const AddAnimal = () => {
 							register={register}
 							errors={errors}
 							required={true}
+							maxDate={today}
 						/>
 						<SelectForm
 							label='Sexo'

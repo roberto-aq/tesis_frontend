@@ -34,7 +34,7 @@ export const createAnimalesSlice: StateCreator<
 	getAnimales: async (
 		fincaId,
 		page = 1,
-		limit = 10,
+		limit = 1000,
 		searchTerm = ''
 	) => {
 		try {
@@ -60,7 +60,7 @@ export const createAnimalesSlice: StateCreator<
 			set({ isLoading: true });
 
 			const data = await AnimalService.getAnimalById(animalId);
-			set({ animalById: data });
+			set({ animalById: { ...data } });
 		} catch (error: any) {
 			set({ error: error.message });
 		} finally {

@@ -44,7 +44,7 @@ export const createAlimentacionSlice: StateCreator<
 			set({ alimentacion: data });
 			return data;
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -60,7 +60,7 @@ export const createAlimentacionSlice: StateCreator<
 			);
 			set({ alimentacionById: data });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -77,7 +77,7 @@ export const createAlimentacionSlice: StateCreator<
 				alimentacion: [...state.alimentacion, newAlimentacion],
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -102,7 +102,7 @@ export const createAlimentacionSlice: StateCreator<
 				),
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -119,7 +119,7 @@ export const createAlimentacionSlice: StateCreator<
 				),
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}

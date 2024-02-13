@@ -24,4 +24,5 @@ export interface InputFormProps {
 	isDisabled?: boolean;
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	minDate?: string;
+	maxDate?: string;
 }

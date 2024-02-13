@@ -80,6 +80,7 @@ export const AddDescarte: React.FC<AddDescarteProps> = ({
 						register={register}
 						errors={errors}
 						required={true}
+						minDate={animalById.fechaNacimiento}
 					/>
 				</div>
 				<SelectForm

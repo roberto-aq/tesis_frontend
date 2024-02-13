@@ -1,10 +1,11 @@
-import { useOutletContext } from 'react-router-dom';
-import { animalLoaderData } from '../../../router/loaders/animalesLoader';
+import { Link, useOutletContext } from 'react-router-dom';
 import { CardInfo } from '../../shared/CardInfo';
 import { LayoutInfoAnimal } from './LayoutInfoAnimal';
+import { AnimalLoader } from '../../../interfaces';
+import { formatearFecha } from '../../../helpers/formatDate';
 
 export const GenealogiaAnimal = () => {
-	const { animalInfo } = useOutletContext<animalLoaderData>();
+	const { animalInfo } = useOutletContext<AnimalLoader>();
 
 	return (
 		<LayoutInfoAnimal title='Genealogía'>
@@ -32,15 +33,18 @@ export const GenealogiaAnimal = () => {
 							title='fecha de nacimiento'
 							content={
 								animalInfo.madre
-									? animalInfo.madre.fechaNacimiento
+									? formatearFecha(animalInfo.madre.fechaNacimiento)
 									: '-'
 							}
 							tooltipText='Muestra la fecha de nacimiento al que pertenece el animal'
 						/>
 					</div>
-					<button className='bg-purple60 self-center text-purple100 text-sm font-bold px-8 py-2 rounded-md'>
+					<Link
+						to={`/inicio/animales/${animalInfo.madre?.id || ''}`}
+						className='bg-purple60 self-center text-purple100 text-sm font-bold px-8 py-2 rounded-md hover:bg-purple100 hover:text-purple60 transition-all duration-300 ease-in-out text-center w-36 mx-auto'
+					>
 						Ver Animal
-					</button>
+					</Link>
 				</div>
 				<div className='flex flex-col gap-5 '>
 					<h3 className='text-3xl font-bold text-center'>Padre</h3>
