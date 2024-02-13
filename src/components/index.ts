@@ -91,3 +91,9 @@ export * from './fincas/AddFinca';
 export * from './fincas/EditFinca';
 export * from './fincas/ModalInfoFinca';
 export * from './fincas/CardContentInfo';
+/* ********************************** */
+/*               INICIO               */
+/* ********************************** */
+export * from './home/CardInfoFinca';
+export * from './home/CardInfoGanado';
+export * from './home/ParrafoInfoGanado';

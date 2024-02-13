@@ -57,4 +57,15 @@ export class FincasService {
 			throw new Error(error.response.data.message);
 		}
 	}
+
+	// Método de obtener Finca para usuario
+	static async getFincaByUser(fincaId: string) {
+		try {
+			const { data } = await api.get(`finca/${fincaId}`);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	}
 }

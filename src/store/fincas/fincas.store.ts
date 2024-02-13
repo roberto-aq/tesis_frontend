@@ -24,6 +24,7 @@ export interface FincaState {
 		finca: FincasResponse
 	) => Promise<FincasResponse>;
 	deleteFinca: (id: string) => Promise<void>;
+	getFincaByUser: (fincaId: string) => Promise<void>;
 }
 
 const storeApi: StateCreator<FincaState> = set => ({
@@ -46,7 +47,7 @@ const storeApi: StateCreator<FincaState> = set => ({
 			);
 			set({ fincas, totalFincas });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -63,7 +64,7 @@ const storeApi: StateCreator<FincaState> = set => ({
 
 			return data;
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -75,7 +76,7 @@ const storeApi: StateCreator<FincaState> = set => ({
 			const data = await FincasService.getFincaById(id);
 			set({ fincaById: data });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -93,7 +94,7 @@ const storeApi: StateCreator<FincaState> = set => ({
 			}));
 			return data;
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -108,7 +109,19 @@ const storeApi: StateCreator<FincaState> = set => ({
 				fincaById: null,
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	getFincaByUser: async (fincaId: string) => {
+		set({ isLoading: true });
+		try {
+			const data = await FincasService.getFincaByUser(fincaId);
+			set({ fincaById: data });
+		} catch (error: any) {
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
