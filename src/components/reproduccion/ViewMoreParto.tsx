@@ -1,78 +1,104 @@
 import { useEffect, useRef, useState } from 'react';
-import { ReproduccionAnimalLoaderData } from '../../interfaces/loader.interface';
 import { CardInfo } from '../shared/CardInfo';
 import { EditParto } from './EditParto';
+import { Parto, ReproduccionAnimalLoader } from '../../interfaces';
+import { useReproduccionStore } from '../../store/reproduccion';
+import {
+	calcularEdadEnMeses,
+	calcularEdadPrimerParto,
+	calcularIntervaloEntrePartos,
+	obtenerPrimerParto,
+} from '../../helpers/functions';
+import { FaTrashAlt } from 'react-icons/fa';
+import { useGeneralStore } from '../../store';
+import { ModalDelete } from '../shared/ModalDelete';
 
 interface ViewMorePartoProps {
-	reproduccionAnimalInfo: ReproduccionAnimalLoaderData;
+	reproduccionAnimalInfo: ReproduccionAnimalLoader;
+	parto?: Parto | null;
+	setIsOpenModalLocal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ViewMoreParto: React.FC<ViewMorePartoProps> = ({
 	reproduccionAnimalInfo,
+	parto,
+	setIsOpenModalLocal,
 }) => {
-	const [showEditForm, setShowEditForm] = useState(false);
-	const editFormRef = useRef<HTMLDivElement>(null);
+	const { info: animal } = reproduccionAnimalInfo;
 
-	const onClick = () => {
-		console.log('Hizo clic');
-		setShowEditForm(true);
+	const partos = useReproduccionStore(state => state.partos);
+	const deleteParto = useReproduccionStore(
+		state => state.deleteParto
+	);
+
+	const setModalError = useGeneralStore(state => state.setModalError);
+
+	const primerParto = obtenerPrimerParto(partos);
+	const edadPrimerParto = calcularEdadPrimerParto(
+		animal.fechaNacimiento,
+		primerParto.fechaParto
+	);
+
+	const intervalos = calcularIntervaloEntrePartos(partos);
+
+	console.log(parto);
+
+	const onDelete = () => {
+		deleteParto(animal.id, parto!.id);
+		setModalError(false);
+		setIsOpenModalLocal(false);
 	};
 
-	useEffect(() => {
-		if (showEditForm && editFormRef.current) {
-			editFormRef.current.scrollIntoView({ behavior: 'smooth' });
-		}
-	}, [showEditForm]);
-
 	return (
-		<div className='flex flex-col gap-6 bg-green-200'>
-			<div className='flex flex-col gap-12 h-[700px] overflow-auto'>
+		<div className='flex flex-col gap-6 py-5'>
+			<div className='flex flex-col gap-12  overflow-auto'>
 				<div className='grid grid-cols-3 gap-5'>
 					<CardInfo
 						title='Número de parto'
 						tooltipText='Muestra el número de parto'
-						content='1'
+						content={parto?.numeroParto.toString() || '-'}
 					/>
 
 					<CardInfo
 						title='Fecha de Parto'
 						tooltipText='Muestra la fecha de parto registrada'
-						content='30 de septiembre 2022'
+						content={parto?.fechaParto || '-'}
 					/>
 
 					<CardInfo
 						title='Número de crías'
 						tooltipText='Muestra el número de crías que tuvo el animal en el parto'
-						content='2'
+						content={parto?.crias.length.toString() || '-'}
 					/>
 
-					<CardInfo
-						title='Sexo de la cría 1'
-						tooltipText='Muestra el sexo de la cría 1'
-						content='Macho'
-					/>
-
-					<CardInfo
-						title='Edad al parto 1'
-						tooltipText='Muestra la edad del animal desde que nació hasta su primer parto'
-						content='19 meses'
-					/>
-				</div>
-				<button
-					className={` text-white px-16 rounded-lg py-2 font-bold flex items-center justify-center gap-3 bg-blueEdit self-center`}
-					onClick={onClick}
-				>
-					Editar
-				</button>
-				{showEditForm && (
-					<div ref={editFormRef}>
-						<EditParto
-							reproduccionAnimalInfo={reproduccionAnimalInfo}
+					{parto?.crias.map((cria, index) => (
+						<CardInfo
+							key={index}
+							title={`Sexo de la cría ${index + 1}`}
+							tooltipText={`Muestra el sexo de la cría ${index + 1}`}
+							content={cria.sexo.toLowerCase()}
 						/>
-					</div>
-				)}
+					))}
 
-				<div className='flex flex-col gap-5'>
+					{parto?.numeroParto === 1 ? (
+						<CardInfo
+							title='Edad al parto 1'
+							tooltipText='Muestra la edad del animal desde que nació hasta su primer parto'
+							content={`${edadPrimerParto} meses` || '-'}
+						/>
+					) : (
+						<CardInfo
+							title='Intervalo de partos'
+							tooltipText='Muestra el intervalo de tiempo entre el parto anterior y el actual'
+							content={
+								`${intervalos[parto!.numeroParto - 2]} días` || '-'
+							}
+						/>
+					)}
+				</div>
+
+				{/* !TODO === HISTORIAL DE SERVICIOS DESDE EL BACKEND */}
+				{/* <div className='flex flex-col gap-5'>
 					<h2 className='text-4xl font-bold text-center mb-5'>
 						Historial de servicios
 					</h2>
@@ -99,8 +125,22 @@ export const ViewMoreParto: React.FC<ViewMorePartoProps> = ({
 							content='Preñada'
 						/>
 					</div>
-				</div>
+				</div> */}
+
+				<button
+					className=' flex gap-2 items-center rounded-lg py-3 px-10 text-white bg-red-500 hover:bg-red-600 transition-all  font-bold text-sm self-center'
+					onClick={() => {
+						setModalError(true);
+					}}
+				>
+					<FaTrashAlt
+						className='text-white  transition-all'
+						size={15}
+					/>
+					Eliminar
+				</button>
 			</div>
+			<ModalDelete handleDelete={onDelete} />
 		</div>
 	);
 };

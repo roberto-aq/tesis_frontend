@@ -23,4 +23,5 @@ export interface InputFormProps {
 	isTextarea?: boolean;
 	isDisabled?: boolean;
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	minDate?: string;
 }

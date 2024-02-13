@@ -12,6 +12,7 @@ import { IoChevronBack } from 'react-icons/io5';
 import { ButtonModal } from '../shared/ButtonModal';
 import { FaPlus } from 'react-icons/fa6';
 import { useGeneralStore } from '../../store';
+import { ModalDelete } from '../shared/ModalDelete';
 
 const tableHeaders = [
 	'Fecha de Pesaje',
@@ -32,9 +33,11 @@ export const TabHistorialPesaje: React.FC<
 		useState<PesoResponse | null>(null);
 
 	const deletePeso = usePesajeStore(state => state.deletePeso);
+
 	const setIsOpenModalAddPeso = useGeneralStore(
 		state => state.setIsOpenModal
 	);
+	const setModalError = useGeneralStore(state => state.setModalError);
 
 	// El nameModal y el label son para colocar el nombre de Modal, esto es para crear un Modal de COnfirmación también para eliminar
 	const onChangeModal = (label: string) => {
@@ -46,6 +49,7 @@ export const TabHistorialPesaje: React.FC<
 		try {
 			await deletePeso(selectedPeso!?.id, animal.id);
 			handleSelectPeso(null);
+			setModalError(false);
 		} catch (error: any) {
 			console.log(error);
 		}
@@ -56,8 +60,6 @@ export const TabHistorialPesaje: React.FC<
 	};
 
 	const pesos = usePesajeStore(state => state.pesos);
-
-	if (!pesos) return <Loader />;
 
 	return (
 		<div className='mt-1'>
@@ -165,7 +167,9 @@ export const TabHistorialPesaje: React.FC<
 						</button>
 						<button
 							className=' flex gap-2 items-center rounded-lg py-2 px-6 text-white bg-red-500 hover:bg-red-600 transition-all  font-bold text-sm'
-							onClick={onDelete}
+							onClick={() => {
+								setModalError(true);
+							}}
 						>
 							<FaTrashAlt
 								className='text-white  transition-all'
@@ -189,6 +193,8 @@ export const TabHistorialPesaje: React.FC<
 					/>
 				</ModalForm>
 			)}
+
+			<ModalDelete handleDelete={onDelete} />
 		</div>
 	);
 };

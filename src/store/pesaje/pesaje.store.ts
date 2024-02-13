@@ -34,7 +34,7 @@ const storeApi: StateCreator<PesajeState> = set => ({
 				);
 			set({ pesos: data });
 		} catch (error: any) {
-			console.log(error.response.data);
+			set({ error });
 			throw new Error(error.response.data.message);
 		} finally {
 			set({ isLoading: false });
@@ -49,9 +49,12 @@ const storeApi: StateCreator<PesajeState> = set => ({
 			);
 			set(state => ({
 				pesos: [...state.pesos, newPeso],
+				error: null,
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({
+				error: 'Ocurrió un error',
+			});
 		} finally {
 			set({ isLoading: false });
 		}
@@ -75,7 +78,7 @@ const storeApi: StateCreator<PesajeState> = set => ({
 				),
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: 'Ocurrió un error' });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -89,7 +92,7 @@ const storeApi: StateCreator<PesajeState> = set => ({
 				pesos: state.pesos.filter(peso => peso.id !== pesoId),
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: 'Oucrrió un error' });
 		} finally {
 			set({ isLoading: false });
 		}

@@ -90,6 +90,38 @@ export class ReproduccionAnimalService {
 		}
 	};
 
+	static async createMultiplePartos(
+		animalId: string,
+		partos: Parto[]
+	) {
+		try {
+			const { data } = await api.post(
+				`/partos/${animalId}/multiple`,
+				partos
+			);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	}
+
+	static async updateMultiplePartos(
+		animalId: string,
+		partos: Parto[]
+	) {
+		try {
+			const { data } = await api.patch(
+				`/partos/${animalId}/update-multiple`,
+				partos
+			);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	}
+
 	/* ********************************** */
 	/*              SERVICIOS             */
 	/* ********************************** */

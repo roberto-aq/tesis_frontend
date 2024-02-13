@@ -27,10 +27,8 @@ export const AddPeso: React.FC<AddPesoProps> = ({ animalById }) => {
 			peso: +data.peso,
 		};
 
-		try {
-			await createPeso(peso, animalById.id);
-			setIsOpenModal(false);
-		} catch (error: any) {}
+		await createPeso(peso, animalById.id);
+		setIsOpenModal(false);
 	});
 
 	return (

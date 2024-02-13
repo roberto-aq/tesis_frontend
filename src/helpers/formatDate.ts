@@ -23,6 +23,34 @@ export const formatDateShort = (isoData: string): string => {
 	return date.toLocaleDateString('es-ES', options);
 };
 
+export const formatearFecha = (
+	fechaInput: string | Date | undefined
+) => {
+	if (!fechaInput) return '-';
+
+	// Determinar si la entrada es una cadena o un objeto Date
+	const fecha =
+		typeof fechaInput === 'string'
+			? new Date(`${fechaInput}T00:00:00`) // Para strings, añadir T00:00:00 para evitar problemas de zona horaria
+			: new Date(fechaInput); // Para objetos Date, usar directamente
+
+	// Asegurarse de que la fecha es válida
+	if (isNaN(fecha.getTime())) {
+		return 'Fecha inválida';
+	}
+
+	const opciones: Intl.DateTimeFormatOptions = {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+		timeZone: 'UTC', // Asegurarse de que la fecha no se convierta a la zona horaria local
+	};
+
+	// Convertir la fecha a una cadena con el formato deseado
+	const newDate: string = fecha.toLocaleDateString('es-ES', opciones);
+	return newDate.split('de').join('').trim();
+};
+
 export const diferenciasDias = (
 	// Esta fecha puede ser ultimo parto, o anterior servicio
 	fechaAnterior: string,

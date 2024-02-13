@@ -49,7 +49,7 @@ export const createAnimalesSlice: StateCreator<
 				);
 			set({ animales, totalAnimales });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -62,7 +62,7 @@ export const createAnimalesSlice: StateCreator<
 			const data = await AnimalService.getAnimalById(animalId);
 			set({ animalById: data });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -74,7 +74,7 @@ export const createAnimalesSlice: StateCreator<
 			const data = await AnimalService.createAnimal(animal);
 			set(state => ({ animales: [...state.animales, data] }));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -90,7 +90,7 @@ export const createAnimalesSlice: StateCreator<
 				),
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -109,7 +109,7 @@ export const createAnimalesSlice: StateCreator<
 
 			return true;
 		} catch (error: any) {
-			set({ error: error.toString() });
+			set({ error: error.message });
 			return false;
 		} finally {
 			set({ isLoading: false });

@@ -58,16 +58,24 @@ export const EditService: React.FC<EditServiceProps> = ({
 	});
 
 	useEffect(() => {
-		const serviciosConFormato = servicios.map(servicio => ({
+		let serviciosConFormato = servicios.map(servicio => ({
 			...servicio,
 			estadoReproductivoId: servicio.estadoReproductivo.id.toString(),
 		}));
-		console.log(serviciosConFormato);
+
+		serviciosConFormato = serviciosConFormato.sort(
+			(a, b) => a.numeroServicio - b.numeroServicio
+		);
+
 		reset({ servicios: serviciosConFormato });
 	}, [servicios, reset]);
 
 	const estadosReproductivos = useAnimalesStore(
 		state => state.estadosReproductivos
+	);
+
+	const deleteServicio = useReproduccionStore(
+		state => state.deleteServicio
 	);
 
 	// Función para manejar el cambio en las fechas de servicio
@@ -110,6 +118,10 @@ export const EditService: React.FC<EditServiceProps> = ({
 			service.numeroServicio = idx + 1; // Reasignar el número de servicio
 		});
 		reset({ servicios: updatedServices }); // Actualizar el formulario con los servicios actualizados
+
+		if (servicios[index].id) {
+			deleteServicio(animal.id, servicios[index].id);
+		}
 	};
 
 	const onEditSubmit = handleSubmit(data => {
@@ -124,14 +136,14 @@ export const EditService: React.FC<EditServiceProps> = ({
 			servicios: [
 				...updateServicios.map(servicio => ({
 					id: servicio.id,
-					fechaServicio: servicio.fechaServicio,
-					fechaCelo: servicio.fechaCelo,
+					fechaServicio: `${servicio.fechaServicio}`,
+					fechaCelo: `${servicio.fechaCelo}`,
 					numeroServicio: servicio.numeroServicio,
 					estadoReproductivoId: +servicio.estadoReproductivoId,
 				})),
 				...newServices.map(servicio => ({
-					fechaServicio: servicio.fechaServicio,
-					fechaCelo: servicio.fechaCelo,
+					fechaServicio: `${servicio.fechaServicio}`,
+					fechaCelo: `${servicio.fechaCelo}`,
 					numeroServicio: servicio.numeroServicio,
 					estadoReproductivoId: +servicio.estadoReproductivoId,
 				})),
@@ -193,6 +205,12 @@ export const EditService: React.FC<EditServiceProps> = ({
 									required={true}
 									onChange={e =>
 										handleFechaServicioChange(index, e.target.value)
+									}
+									minDate={
+										index === 0
+											? ultimoParto?.fechaParto ||
+											  animal.fechaNacimiento
+											: watchServicios[index - 1].fechaServicio
 									}
 								/>
 								<SelectForm

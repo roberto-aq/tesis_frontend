@@ -1,5 +1,6 @@
 import {
 	AddService,
+	AlertError,
 	EditService,
 	InfoHeaderAnimal,
 	LayoutInfoAnimal,
@@ -39,15 +40,22 @@ export const ReproduccionDetailPage = () => {
 		state => state.setIsOpenModal
 	);
 	const isOpenModal = useGeneralStore(state => state.isOpenModal);
+	const showAlertError = useGeneralStore(
+		state => state.showAlertError
+	);
 
 	const servicios = useReproduccionStore(state => state.servicios);
-
 	const getServicios = useReproduccionStore(
 		state => state.getServicios
 	);
+	const getPartos = useReproduccionStore(state => state.getPartos);
+	const error = useReproduccionStore(state => state.error);
+
+	console.log(showAlertError, error);
 
 	useEffect(() => {
 		getServicios(animalById.info.id);
+		getPartos(animalById.info.id);
 	}, []);
 
 	const onChangeModal = () => {
@@ -107,6 +115,8 @@ export const ReproduccionDetailPage = () => {
 					/>
 				</ModalForm>
 			)}
+
+			{showAlertError && error && <AlertError error={error} />}
 		</div>
 	);
 };

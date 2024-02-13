@@ -15,8 +15,13 @@ export const AlertError: React.FC<AlertErrorProps> = ({ error }) => {
 	);
 	const onDismiss = () => setShowAlertError(!showAlertError);
 
+	const errorMessage =
+		error === 'Internal server error'
+			? 'Algo salió mal. Vuelva a intentarlo en otro momento.'
+			: error;
+
 	return (
-		<div className='absolute bottom-0 right-0 mr-8 mb-8'>
+		<div className='absolute bottom-0 right-0 mr-8 mb-8 w-[25%]'>
 			<Alert
 				onDismiss={onDismiss}
 				dismiss={false}
@@ -32,7 +37,7 @@ export const AlertError: React.FC<AlertErrorProps> = ({ error }) => {
 					<Alert.Body>
 						<Alert.Title>¡Ups!</Alert.Title>
 						<Alert.Description>
-							{error ||
+							{errorMessage ||
 								'Algo salió mal. Vuelva a intentarlo en otro momento.'}
 						</Alert.Description>
 					</Alert.Body>

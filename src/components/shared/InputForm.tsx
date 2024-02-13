@@ -12,6 +12,7 @@ export const InputForm: React.FC<InputFormProps> = ({
 	isDisabled = false,
 	errorField,
 	onChange,
+	minDate,
 }) => {
 	return (
 		<div className='flex flex-col gap-2 '>
@@ -56,7 +57,13 @@ export const InputForm: React.FC<InputFormProps> = ({
 					<input
 						type={type}
 						step={type === 'number' ? 'any' : ''}
-						min={type === 'number' ? '0' : ''}
+						min={
+							type === 'date'
+								? minDate
+								: type === 'number'
+								? '0'
+								: undefined
+						}
 						placeholder={placeholder}
 						disabled={isDisabled}
 						className={`w-full bg-transparent outline-none  flex-1 font-bold py-2 ${
@@ -73,6 +80,7 @@ export const InputForm: React.FC<InputFormProps> = ({
 							},
 						})}
 						onChange={onChange}
+						autoComplete='off'
 					/>
 				)}
 			</div>

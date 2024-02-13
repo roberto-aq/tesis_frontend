@@ -3,7 +3,7 @@ import { FiInfo } from 'react-icons/fi';
 
 interface CardInfoProps {
 	title: string;
-	content: string;
+	content: string | number;
 	tooltipText?: string;
 }
 

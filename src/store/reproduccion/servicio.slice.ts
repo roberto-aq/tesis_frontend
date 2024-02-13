@@ -54,7 +54,7 @@ export const createServiciosSlice: StateCreator<
 			);
 			set({ servicios: data });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -70,7 +70,7 @@ export const createServiciosSlice: StateCreator<
 			);
 			set({ servicio: data });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -88,7 +88,7 @@ export const createServiciosSlice: StateCreator<
 				servicios: [...state.servicios, data],
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -110,7 +110,7 @@ export const createServiciosSlice: StateCreator<
 				servicio: data,
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -131,7 +131,7 @@ export const createServiciosSlice: StateCreator<
 			}));
 			return true;
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 			return false;
 		} finally {
 			set({ isLoading: false });
@@ -151,7 +151,7 @@ export const createServiciosSlice: StateCreator<
 				servicios: [...state.servicios, ...data],
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -167,15 +167,21 @@ export const createServiciosSlice: StateCreator<
 					servicios
 				);
 			set(state => ({
-				servicios: state.servicios.map(
-					servicio =>
-						data.find(
-							(service: Servicio) => service.id === servicio.id
-						) || servicio
-				),
+				servicios: [
+					...state.servicios.map(
+						servicio =>
+							data.find(
+								(service: Servicio) => service.id === servicio.id
+							) || servicio
+					),
+					...data.filter(
+						(s: Servicio) =>
+							!state.servicios.some(servicio => servicio.id === s.id)
+					),
+				],
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}

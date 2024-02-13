@@ -1,13 +1,15 @@
 import {
 	AddPeso,
+	AlertError,
 	InfoHeaderAnimal,
 	LayoutInfoAnimal,
+	Loader,
 	ModalForm,
 	TabHistorialPesaje,
 	TabInicioPesaje,
 } from '../components';
 import { useLoaderData } from 'react-router-dom';
-import { useGeneralStore } from '../store';
+import { useGeneralStore, usePesajeStore } from '../store';
 import { FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
 import { PesajeAnimalLoader } from '../interfaces';
@@ -17,6 +19,12 @@ export const PesajeDetailPage = () => {
 	console.log(animalById);
 
 	const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+	const showAlertError = useGeneralStore(
+		state => state.showAlertError
+	);
+
+	const error = usePesajeStore(state => state.error);
 
 	const tabs = [
 		{ label: 'Inicio', content: <TabInicioPesaje /> },
@@ -63,12 +71,12 @@ export const PesajeDetailPage = () => {
 				</div>
 				{tabs[activeTabIndex].content}
 			</LayoutInfoAnimal>
-
 			{isOpenModal && (
 				<ModalForm title='Agregar Peso'>
 					<AddPeso animalById={animalById.animal} />
 				</ModalForm>
 			)}
+			{showAlertError && error && <AlertError error={error} />}
 		</div>
 	);
 };

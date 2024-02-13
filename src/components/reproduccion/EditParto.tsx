@@ -1,18 +1,27 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { FaPlus } from 'react-icons/fa6';
 import { ButtonAction } from '../shared/ButtonAction';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { MdOutlineClose } from 'react-icons/md';
 import { InputForm } from '../shared/InputForm';
 import { InputDisabled } from '../shared/InputDisabled';
-import { ReproduccionAnimalLoaderData } from '../../interfaces/loader.interface';
+import { ReproduccionAnimalLoader } from '../../interfaces';
+import { useReproduccionStore } from '../../store/reproduccion';
+import { SelectForm } from '../shared/SelectForm';
+
+const opcionesSexo = [
+	{ id: 'MACHO', nombre: 'Macho' },
+	{ id: 'HEMBRA', nombre: 'Hembra' },
+];
 
 interface EditPartoProps {
-	reproduccionAnimalInfo: ReproduccionAnimalLoaderData;
+	reproduccionAnimalInfo: ReproduccionAnimalLoader;
+	setIsOpenModalLocal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const EditParto: React.FC<EditPartoProps> = ({
 	reproduccionAnimalInfo,
+	setIsOpenModalLocal,
 }) => {
 	const {
 		register,
@@ -27,10 +36,11 @@ export const EditParto: React.FC<EditPartoProps> = ({
 		defaultValues: {
 			partos: [
 				{
+					id: '',
 					fechaParto: '',
 					numeroCrias: 1,
-					idEstadoReproductivo: '',
 					numeroParto: 1,
+					crias: [{ sexo: '' }],
 				},
 			],
 		},
@@ -38,35 +48,114 @@ export const EditParto: React.FC<EditPartoProps> = ({
 
 	const { info: animal } = reproduccionAnimalInfo;
 
+	const watchPartos = watch('partos');
+
+	const partos = useReproduccionStore(state => state.partos);
+	const deleteParto = useReproduccionStore(
+		state => state.deleteParto
+	);
+	const updateMultiplePartos = useReproduccionStore(
+		state => state.updateMultiplePartos
+	);
+
 	const { fields, append, remove } = useFieldArray({
 		control,
 		name: 'partos',
 	});
 
-	const onAddSubmit = handleSubmit(data => {
-		console.log(data);
+	useEffect(() => {
+		const partosConFormato = partos.map(parto => ({
+			...parto,
+			numeroCrias: parto.crias.length,
+			crias: parto.crias.map(cria => ({ sexo: cria.sexo })),
+		}));
+
+		reset({ partos: partosConFormato });
+	}, [partos, reset]);
+
+	const onNumeroCriasChange = (
+		index: number,
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		// Actualiza el número de crías directamente
+		const numeroCrias = event.target.valueAsNumber;
+
+		// Asegúrate de que el número de crías es un número válido
+		if (isNaN(numeroCrias) || numeroCrias < 0) return;
+
+		// Actualiza el estado del formulario para el número de crías
+		setValue(`partos[${index}].numeroCrias` as any, numeroCrias);
+
+		// Actualiza el estado del formulario para las crías
+		const criasArray = Array.from({ length: numeroCrias }, () => ({
+			sexo: '',
+		}));
+		setValue(`partos[${index}].crias` as any, criasArray);
+	};
+
+	const onEditSubmit = handleSubmit(data => {
+		// 1. Filtrar los partos existentes que tienen un ID para actualización
+		const updatedPartos = data.partos.filter(parto => parto.id);
+
+		// 2. Filtrar los nuevos partos que no tienen ID para ser agregados
+		const newPartos = data.partos.filter(parto => !parto.id);
+
+		// 3. Preparar las crías para cada parto
+		const partosPreparados: any = {
+			partos: [
+				...updatedPartos.map(parto => ({
+					id: parto.id,
+					fechaParto: parto.fechaParto,
+					numeroParto: parto.numeroParto,
+					crias: parto.crias.map(cria => ({
+						sexo: cria.sexo,
+					})),
+				})),
+				...newPartos.map(parto => ({
+					fechaParto: parto.fechaParto,
+					numeroParto: parto.numeroParto,
+					crias: parto.crias.map(cria => ({
+						sexo: cria.sexo,
+					})),
+				})),
+			],
+		};
+		updateMultiplePartos(animal.id, partosPreparados);
+		setIsOpenModalLocal(false);
 	});
 
 	const onClearParto = (index: number) => {
 		remove(index);
+
+		// Actualiza los números de partos de los partos restantes
+		const updatedPartos = getValues('partos');
+		updatedPartos.forEach((parto, idx) => {
+			parto.numeroParto = idx + 1; // Reasignar el número de parto
+		});
+		reset({ partos: updatedPartos }); // Actualizar el formulario con los partos actualizados
+
+		if (partos[index].id) {
+			deleteParto(animal.id, partos[index].id);
+		}
 	};
 
 	const onAddParto = () => {
 		append({
+			id: '',
 			fechaParto: '',
 			numeroCrias: 1,
-			idEstadoReproductivo: '',
-			numeroParto: 1,
+			numeroParto: fields.length + 1,
+			crias: [{ sexo: '' }],
 		});
 	};
 
 	return (
 		<form
 			className='flex flex-col gap-5  h-full px-5'
-			onSubmit={onAddSubmit}
+			onSubmit={onEditSubmit}
 		>
 			<div className='flex'></div>
-			<div className='flex flex-col gap-12 h-[100%] overflow-auto'>
+			<div className='flex flex-col gap-12 h-[700px] overflow-auto'>
 				<div className='grid grid-cols-2 gap-20'>
 					<InputDisabled
 						label='nombre'
@@ -81,9 +170,7 @@ export const EditParto: React.FC<EditPartoProps> = ({
 				</div>
 
 				<div className='flex flex-col gap-5'>
-					<h3 className='font-bold text-3xl text-center'>
-						Partos
-					</h3>
+					<h3 className='font-bold text-3xl text-center'>Partos</h3>
 
 					{fields.map((field, index) => (
 						<div
@@ -110,6 +197,11 @@ export const EditParto: React.FC<EditPartoProps> = ({
 									// onChange={e =>
 									// 	handleFechaServicioChange(index, e.target.value)
 									// }
+									minDate={
+										index === 0
+											? animal.fechaNacimiento
+											: watchPartos[index - 1].fechaParto
+									}
 								/>
 								<InputForm
 									type='number'
@@ -118,7 +210,35 @@ export const EditParto: React.FC<EditPartoProps> = ({
 									name={`partos[${index}].numeroCrias`}
 									label='Número de Crías'
 									placeholder='Ejem: 3'
+									required={true}
+									onChange={e => onNumeroCriasChange(index, e)}
+									errorField={
+										errors?.partos?.[index]?.numeroCrias || undefined
+									}
 								/>
+
+								{Array.from({
+									length:
+										+watch(`partos[${index}].numeroCrias` as any) ||
+										1,
+								}).map((_, criaIndex) => (
+									<SelectForm
+										key={criaIndex}
+										items={opcionesSexo}
+										placeholder='Seleccione una opción:'
+										label={`Sexo cría ${criaIndex + 1}`}
+										name={`partos[${index}].crias[${criaIndex}].sexo`}
+										register={register}
+										setValue={setValue}
+										errors={errors}
+										required={true}
+										errorField={
+											errors?.partos?.[index]?.crias?.[criaIndex]
+												?.sexo
+										}
+										initialValue={field.crias[criaIndex]?.sexo}
+									/>
+								))}
 							</div>
 							<span
 								className='text-purple100 font-bold cursor-pointer '

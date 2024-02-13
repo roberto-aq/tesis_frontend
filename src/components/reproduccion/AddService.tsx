@@ -103,6 +103,28 @@ export const AddService: React.FC<AddServiceProps> = ({
 		});
 	};
 
+	const puedeAgregarServicio = () => {
+		// Encuentra el último servicio con estado reproductivo "preñada"
+		const ultimoServicioPreñada = watchServicios.find(
+			servicio => servicio.estadoReproductivoId === '3'
+		); // Asume que "3" es el ID correspondiente al estado "preñada"
+
+		if (!ultimoServicioPreñada) return true; // Si no hay servicios con estado "preñada", permite agregar servicios
+
+		// Calcula la fecha estimada de parto sumando 280 días a la fecha de servicio
+		const fechaServicio = new Date(
+			ultimoServicioPreñada.fechaServicio
+		);
+		const fechaEstimadaParto = new Date(
+			fechaServicio.setDate(fechaServicio.getDate() + 280)
+		);
+
+		// Compara la fecha actual con la fecha estimada de parto
+		return new Date() > fechaEstimadaParto; // Retorna true si la fecha actual es mayor que la fecha estimada de parto
+	};
+
+	console.log(puedeAgregarServicio());
+
 	const onAddSubmit = handleSubmit(data => {
 		const servicios: any = {
 			servicios: [
@@ -167,6 +189,12 @@ export const AddService: React.FC<AddServiceProps> = ({
 									required={true}
 									onChange={e =>
 										handleFechaServicioChange(index, e.target.value)
+									}
+									minDate={
+										index === 0
+											? ultimoParto?.fechaParto ||
+											  animal.fechaNacimiento
+											: watchServicios[index - 1].fechaServicio
 									}
 								/>
 								<SelectForm
@@ -237,8 +265,14 @@ export const AddService: React.FC<AddServiceProps> = ({
 					))}
 
 					<div
-						className='flex gap-5 border border-purple80 self-start py-3 px-6 rounded-md mt-4 cursor-pointer'
-						onClick={onAddService}
+						className={`flex gap-5 border border-purple80 self-start py-3 px-6 rounded-md mt-4 ${
+							puedeAgregarServicio()
+								? 'cursor-pointer'
+								: 'cursor-not-allowed'
+						}`}
+						onClick={() => {
+							if (puedeAgregarServicio()) onAddService();
+						}}
 					>
 						<div className='flex items-center justify-center bg-purple100 h-[25px] w-[25px] rounded-full'>
 							<FaPlus size={13} className='text-white' />
