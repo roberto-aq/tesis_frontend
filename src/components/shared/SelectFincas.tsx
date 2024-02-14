@@ -8,18 +8,18 @@ import { FincasResponse } from '../../interfaces';
 export const SelectFincas = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchInput, setSearchInput] = useState('');
-	const [selectedItem, setSelectedItem] =
-		useState<FincasResponse | null>(null);
-
-	const selectedFinca = useAuthStore(state => state.selectedFinca);
-	const setSelectedFinca = useAuthStore(
-		state => state.setSelectedFinca
-	);
 
 	const isLoading = useFincasStore(state => state.isLoading);
 	const getFincas = useFincasStore(state => state.getFincas);
 	const fincas = useFincasStore(state => state.fincas);
 
+	const [selectedItem, setSelectedItem] =
+		useState<FincasResponse | null>(fincas[0]);
+
+	const selectedFinca = useAuthStore(state => state.selectedFinca);
+	const setSelectedFinca = useAuthStore(
+		state => state.setSelectedFinca
+	);
 	const setFincaId = useAuthStore(state => state.setFincaId);
 
 	const onOptionClicked = (finca: FincasResponse) => () => {
@@ -37,8 +37,19 @@ export const SelectFincas = () => {
 		setSearchInput(e.target.value.trim());
 	};
 
+	const getFinca = async () => {
+		await getFincas(1, 10, searchInput);
+		if (fincas.length > 0) {
+			const defaultFinca = fincas[0]; // Tomamos la primera finca como default
+			setFincaId(defaultFinca.id);
+			setSelectedFinca(defaultFinca);
+		}
+		// setFincaId(fincas[0].id);
+		console.log(selectedFinca);
+	};
+
 	useEffect(() => {
-		getFincas(1, 10, searchInput);
+		getFinca();
 	}, [getFincas]);
 
 	if (isLoading && !selectedItem) return <p>cargando...</p>;

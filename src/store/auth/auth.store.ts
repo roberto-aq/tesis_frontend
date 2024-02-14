@@ -111,6 +111,7 @@ const storeApi: StateCreator<AuthState> = set => ({
 			user: undefined,
 			isLoading: false,
 			fincaId: undefined,
+			selectedFinca: null,
 		});
 	},
 

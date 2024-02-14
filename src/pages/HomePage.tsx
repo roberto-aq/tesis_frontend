@@ -48,14 +48,16 @@ export const HomePage = () => {
 	});
 
 	useEffect(() => {
-		getAnimales(fincaId);
-		getFincaByUser(fincaId);
+		if (fincaId) {
+			getAnimales(fincaId);
+			getFincaByUser(fincaId);
+		}
 	}, []);
 
 	return (
-		<div className='flex flex-col gap-8'>
+		<div className='flex flex-col gap-6'>
 			<div className='flex flex-col gap-6'>
-				<h1 className='text-2xl font-bold text-center'>
+				<h1 className='text-3xl font-bold text-center text-purple100 '>
 					Información General de la Finca
 				</h1>
 				<div className='grid grid-cols-3 gap-5'>
@@ -81,13 +83,13 @@ export const HomePage = () => {
 					/>
 				</div>
 			</div>
-			<div className='flex flex-col gap-8'>
+			<div className='flex flex-col gap-3'>
 				<h1 className='text-3xl font-bold text-center text-purple100'>
 					Resumen Ganado
 				</h1>
 				<div className='grid grid-cols-3 gap-5'>
 					<div className='col-span-3'>
-						<div className='bg-white rounded-lg p-6 flex flex-col gap-7 items-center shadow-lg'>
+						<div className='bg-purple60 rounded-lg p-6 flex flex-col gap-7 items-center shadow-lg'>
 							<div className='flex flex-col gap-2 items-center'>
 								<p className='font-bold text-purple100 text-2xl'>
 									Total de animales:
@@ -107,36 +109,59 @@ export const HomePage = () => {
 									))}
 								</CardInfoGanado>
 								<CardInfoGanado label='Distribución por grupo'>
-									{Object.keys(distribucionGrupo).map(
-										(key, index) => (
-											<ParrafoInfoGanado
-												clave={key}
-												distribucion={distribucionGrupo}
-												key={index}
-											/>
+									{Object.keys(distribucionGrupo).length > 0 ? (
+										Object.keys(distribucionGrupo).map(
+											(key, index) => (
+												<ParrafoInfoGanado
+													clave={key}
+													distribucion={distribucionGrupo}
+													key={index}
+												/>
+											)
 										)
+									) : (
+										<p className='font-semibold text-purple100 text-center mt-5'>
+											No hay datos disponibles.
+										</p>
 									)}
 								</CardInfoGanado>
 								<CardInfoGanado label='Distribución por estado reproductivo'>
-									{Object.keys(distribucionEstadoReproductivo).map(
-										(key, index) => (
-											<ParrafoInfoGanado
-												clave={key}
-												distribucion={distribucionEstadoReproductivo}
-												key={index}
-											/>
+									{Object.keys(distribucionEstadoReproductivo)
+										.length > 0 ? (
+										Object.keys(distribucionEstadoReproductivo).map(
+											(key, index) => (
+												<ParrafoInfoGanado
+													clave={key}
+													distribucion={
+														distribucionEstadoReproductivo
+													}
+													key={index}
+												/>
+											)
 										)
+									) : (
+										<p className='font-semibold text-purple100 text-center mt-5'>
+											No hay datos disponibles.
+										</p>
 									)}
 								</CardInfoGanado>
 
 								<CardInfoGanado label='Distribución por raza'>
-									{Object.keys(distribucionRaza).map((key, index) => (
-										<ParrafoInfoGanado
-											clave={key}
-											distribucion={distribucionRaza}
-											key={index}
-										/>
-									))}
+									{Object.keys(distribucionRaza).length > 0 ? (
+										Object.keys(distribucionRaza).map(
+											(key, index) => (
+												<ParrafoInfoGanado
+													clave={key}
+													distribucion={distribucionRaza}
+													key={index}
+												/>
+											)
+										)
+									) : (
+										<p className='font-semibold text-purple100 text-center mt-5'>
+											No hay datos disponibles.
+										</p>
+									)}
 								</CardInfoGanado>
 							</div>
 						</div>

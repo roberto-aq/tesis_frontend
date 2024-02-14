@@ -10,8 +10,8 @@ export const ParrafoInfoGanado: React.FC<ParrafoInfoGanadoProps> = ({
 	distribucion,
 }) => {
 	return (
-		<p className='font-bold  text-xl'>
-			{clave} - {distribucion[clave]}
+		<p className='font-bold  text-lg flex gap-5'>
+			<span>{clave}</span> - <span>{distribucion[clave] || '0'}</span>
 		</p>
 	);
 };
