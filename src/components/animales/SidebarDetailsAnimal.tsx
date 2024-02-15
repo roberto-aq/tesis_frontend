@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
-import imagenAnimal from '../../assets/vaca1.png';
+import imagenAnimal from '../../assets/vaca1.webp';
 import { enlacesAnimales } from '../../data/enlaces';
 
 export const SidebarDetailsAnimal = () => {

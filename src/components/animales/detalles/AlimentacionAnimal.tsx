@@ -7,7 +7,7 @@ import {
 	Loader,
 	ModalDelete,
 	ModalForm,
-} from '../../../components';
+} from '../..';
 import { MdEdit } from 'react-icons/md';
 import { FaPlus, FaTrashAlt } from 'react-icons/fa';
 import { IoChevronBack } from 'react-icons/io5';

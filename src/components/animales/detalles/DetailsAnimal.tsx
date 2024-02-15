@@ -1,5 +1,5 @@
 import { LayoutInfoAnimal } from './LayoutInfoAnimal';
-import { CardInfo, Loader } from '../../../components';
+import { CardInfo, Loader } from '../..';
 import { useOutletContext } from 'react-router-dom';
 import { Animal, AnimalLoader } from '../../../interfaces';
 

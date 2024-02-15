@@ -4,7 +4,7 @@ import {
 	ImageField,
 	InputForm,
 	SelectForm,
-} from '../../components';
+} from '..';
 import { useAnimalesStore } from '../../store/animales';
 import { useAuthStore, useGeneralStore } from '../../store';
 

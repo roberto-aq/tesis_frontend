@@ -1,5 +1,5 @@
-import imagenAuth1 from '../../assets/imagen-auth1.png';
-import imagenAuth2 from '../../assets/imagen-auth2.png';
+import imagenAuth1 from '../../assets/imagen-auth1.webp';
+import imagenAuth2 from '../../assets/imagen-auth2.webp';
 
 interface SectionAuthProps {
 	children: React.ReactNode;
