@@ -53,13 +53,13 @@ export const FincasTableList = () => {
 									{finca.forrajes}
 								</span>
 								<span className='font-bold text-center capitalize'>
-									{finca.numeroPotreros}
+									{finca.numeroPotreros || '-'}
 								</span>
 								<span className='font-bold text-center capitalize'>
-									{finca.areaTotal}
+									{finca.areaTotal || '-'}
 								</span>
 								<span className='font-bold text-center capitalize'>
-									{finca.areaAprovechable}
+									{finca.areaAprovechable || '-'}
 								</span>
 							</div>
 						))}

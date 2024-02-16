@@ -3,6 +3,7 @@ import { FaPlus } from 'react-icons/fa';
 import { MdSearch } from 'react-icons/md';
 import { LuFilter } from 'react-icons/lu';
 import { FaChevronRight, FaChevronLeft } from 'react-icons/fa6';
+import { RiFileExcel2Fill } from 'react-icons/ri';
 import {
 	AddAnimal,
 	AnimalesTableList,
@@ -11,6 +12,7 @@ import {
 } from '../components';
 import { useAuthStore, useGeneralStore } from '../store';
 import { useAnimalesStore } from '../store/animales';
+import { ReportesServie } from '../services/reportes.service';
 
 export const AnimalesPage = () => {
 	const [page, setPage] = useState(1);
@@ -64,16 +66,46 @@ export const AnimalesPage = () => {
 		setSearchInput(newSearchTerm);
 	};
 
+	const descargarReporte = async () => {
+		if (fincaId) {
+			try {
+				const data = await ReportesServie.getReporteAnimales(fincaId);
+				const url = window.URL.createObjectURL(new Blob([data]));
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', 'reporte_animales.xlsx'); // Asegúrate de que el nombre coincida con tu expectativa
+				document.body.appendChild(link);
+				link.click();
+				link.remove(); // Limpiar después de descargar
+				window.URL.revokeObjectURL(url); // Liberar recursos
+			} catch (error) {
+				console.log(error);
+			}
+		}
+	};
+
 	return (
 		<div className=' h-full flex flex-col gap-7 '>
 			<div className='flex items-center justify-between'>
 				<h3 className='text-3xl font-bold'>Lista de Animales</h3>
-				<ButtonModal
-					textLabel={'Añadir Animal'}
-					Icon={FaPlus}
-					color='secondaryGreen'
-					onClick={onChangeModal}
-				/>
+				<div className='flex gap-5'>
+					<ButtonModal
+						textLabel={'Añadir Animal'}
+						Icon={FaPlus}
+						color='secondaryGreen'
+						onClick={onChangeModal}
+					/>
+					<button
+						className={`bg-slate-200 px-5 rounded-lg py-2 flex items-center justify-center gap-3 font-bold  hover:bg-slate-300 transition-all duration-500  ${
+							animales.length === 0 ? 'cursor-not-allowed' : ''
+						} `}
+						disabled={animales.length === 0}
+						onClick={descargarReporte}
+					>
+						<RiFileExcel2Fill className='text-secondaryGreen' />
+						Descargar reporte
+					</button>
+				</div>
 			</div>
 			<section className='flex flex-col bg-white flex-1 rounded-lg p-5 gap-10'>
 				<div className='flex w-full justify-between items-center '>

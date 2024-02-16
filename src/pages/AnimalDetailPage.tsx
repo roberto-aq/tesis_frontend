@@ -5,6 +5,7 @@ import {
 	DataHeader,
 	EditAnimal,
 	Loader,
+	ModalDelete,
 	ModalForm,
 	SidebarDetailsAnimal,
 } from '../components';
@@ -15,7 +16,6 @@ import { useAnimalesStore } from '../store/animales';
 import { useEffect } from 'react';
 
 export const AnimalDetailPage = () => {
-	const animalInfo = useAnimalesStore(state => state.animalById);
 	const isOpenModal = useGeneralStore(state => state.isOpenModal);
 	const setIsOpenModal = useGeneralStore(
 		state => state.setIsOpenModal
@@ -26,7 +26,9 @@ export const AnimalDetailPage = () => {
 	const setShowAlertError = useGeneralStore(
 		state => state.setShowAlertError
 	);
+	const setModalError = useGeneralStore(state => state.setModalError);
 
+	const animalInfo = useAnimalesStore(state => state.animalById);
 	const deleteAnimal = useAnimalesStore(state => state.deleteAnimal);
 	const getRazas = useAnimalesStore(state => state.getRazas);
 	const getGrupos = useAnimalesStore(state => state.getGrupos);
@@ -34,6 +36,7 @@ export const AnimalDetailPage = () => {
 		state => state.getEstadosReproductivos
 	);
 	const error = useAnimalesStore(state => state.error);
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -54,6 +57,7 @@ export const AnimalDetailPage = () => {
 		if (success) navigate('/inicio/animales', { replace: true });
 
 		setShowAlertError(true);
+		setModalError(false);
 	};
 
 	return (
@@ -80,7 +84,7 @@ export const AnimalDetailPage = () => {
 							/>
 							<button
 								className='bg-red-500 w-10 flex items-center justify-center rounded-md cursor-pointer hover:bg-red-600'
-								onClick={onDeleteAnimal}
+								onClick={() => setModalError(true)}
 							>
 								<FaTrashAlt size={20} color='#fff' />
 							</button>
@@ -96,6 +100,8 @@ export const AnimalDetailPage = () => {
 					<EditAnimal animalById={animalInfo} />
 				</ModalForm>
 			)}
+
+			<ModalDelete handleDelete={onDeleteAnimal} />
 
 			{showAlertError && error && <AlertError error={error} />}
 		</div>

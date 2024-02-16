@@ -5,6 +5,7 @@ import { useAuthStore } from '../../store';
 import { UsuariosInactivos } from '../../interfaces';
 import { ModalInfoFinca } from './ModalInfoFinca';
 import { AuthService } from '../../services/auth.service';
+import { formatearFecha } from '../../helpers/formatDate';
 
 const headersRow = [
 	'Nombre de la finca',
@@ -67,7 +68,9 @@ export const TabSolicitudes = () => {
 								{usuario.finca?.propietario || 'Sin finca'}
 							</p>
 							<p className='font-bold text-center'>
-								{usuario.finca?.fecha_registro || 'Sin finca'}
+								{formatearFecha(
+									usuario.finca?.fecha_registro.split('T')[0]
+								) || 'Sin finca'}
 							</p>
 							<div className='flex gap-3 justify-center '>
 								<button
@@ -77,9 +80,9 @@ export const TabSolicitudes = () => {
 									<FaCheck size={20} color='#fff' />
 								</button>
 								{/* !TODO RECHAZAR*/}
-								<button className='bg-red-500 h-[40px] w-[40px] flex items-center justify-center rounded-lg hover:bg-red-600'>
+								{/* <button className='bg-red-500 h-[40px] w-[40px] flex items-center justify-center rounded-lg hover:bg-red-600'>
 									<CgClose size={20} color='#fff' />
-								</button>
+								</button> */}
 							</div>
 							<button
 								className='bg-purple80 h-full text-white font-bold rounded-md hover:bg-purple100 text-sm'

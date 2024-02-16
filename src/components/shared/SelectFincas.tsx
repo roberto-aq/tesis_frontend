@@ -52,7 +52,7 @@ export const SelectFincas = () => {
 		getFinca();
 	}, [getFincas]);
 
-	if (isLoading && !selectedItem) return <p>cargando...</p>;
+	if (isLoading) return <p>cargando...</p>;
 
 	return (
 		<div className='w-[300px] mr-5 '>

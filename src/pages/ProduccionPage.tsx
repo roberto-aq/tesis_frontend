@@ -13,6 +13,7 @@ export const ProduccionPage = () => {
 	);
 
 	const [date, setDate] = useState<Date | null>(null);
+	const [editable, setEditable] = useState(false);
 	const [searchInput, setSearchInput] = useState('');
 	const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
@@ -32,7 +33,10 @@ export const ProduccionPage = () => {
 	console.log(date);
 
 	const activateAddRecord = () => {
-		console.log('click');
+		setEditable(true);
+		if (!date) {
+			setDate(new Date());
+		}
 	};
 
 	return (
@@ -89,29 +93,12 @@ export const ProduccionPage = () => {
 							300
 						</p>
 					</div>
-					<div className=' bg-purple60   rounded-lg flex flex-col flex-1 py-2 px-5 gap-[8px]'>
-						<div className='flex justify-between items-center relative'>
-							<p className='text-secondGray font-bold capitalize '>
-								Promedio Ltrs día
-							</p>
-							<button
-								onClick={() => setIsTooltipVisible(!isTooltipVisible)}
-							>
-								<FiInfo color='#A9A6AA' size={20} />
-							</button>
-							{isTooltipVisible && (
-								<p className='absolute top-full right-0 w-3/4 mt-1 bg-purple80 text-white text-[11px] p-2 rounded-lg shadow-lg z-10'>
-									Muestra el promedio de ltrs de los animales en un
-									día seleccionado
-								</p>
-							)}
-						</div>
-						<p className='font-bold text-sm whitespace-normal overflow-hidden break-words capitalize'>
-							300
-						</p>
-					</div>
 				</div>
-				<ProduccionTable />
+				<ProduccionTable
+					fecha={date}
+					editable={editable}
+					setEditable={setEditable}
+				/>
 			</div>
 		</div>
 	);

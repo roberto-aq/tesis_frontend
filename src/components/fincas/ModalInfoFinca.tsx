@@ -2,6 +2,7 @@ import { MdOutlineClose } from 'react-icons/md';
 import { UsuariosInactivos } from '../../interfaces';
 import { CardContentInfo } from './CardContentInfo';
 import { IoCheckmarkCircle } from 'react-icons/io5';
+import { formatearFecha } from '../../helpers/formatDate';
 
 export interface ModalInfoFincaProps {
 	setModalLocalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -111,7 +112,11 @@ export const ModalInfoFinca: React.FC<ModalInfoFincaProps> = ({
 							/>
 							<CardContentInfo
 								title='Fecha de solicitud'
-								content={usuario.fecha_creacion}
+								content={
+									formatearFecha(
+										usuario.fecha_creacion.split('T')[0]
+									) || '-'
+								}
 							/>
 							<CardContentInfo
 								title='Teléfono'
@@ -124,7 +129,7 @@ export const ModalInfoFinca: React.FC<ModalInfoFincaProps> = ({
 						</div>
 					</div>
 					<button className='bg-secondaryGreen self-center h-[45px] flex items-center justify-center text-white font-bold gap-3 px-10 rounded-lg mt-5 hover:bg-green-600'>
-						<IoCheckmarkCircle size={20}/>
+						<IoCheckmarkCircle size={20} />
 						Aceptar
 					</button>
 				</div>

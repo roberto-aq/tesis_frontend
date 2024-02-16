@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useAnimalesStore } from '../../store/animales';
 import { Loader } from '../shared/Loader';
 import { useAuthStore } from '../../store';
+import { useForm } from 'react-hook-form';
+import { useReproduccionStore } from '../../store/reproduccion';
 
 const tableHeaders = [
 	'Nombre',
@@ -10,29 +12,74 @@ const tableHeaders = [
 	'Días de Lactancia',
 	'Total de Ltrs',
 ];
-export const ProduccionTable = () => {
+
+interface ProduccionTableProps {
+	fecha: Date | null;
+	editable: boolean;
+	setEditable: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const ProduccionTable: React.FC<ProduccionTableProps> = ({
+	fecha,
+	editable,
+	setEditable,
+}) => {
+	const { register, handleSubmit, setValue, getValues } = useForm({
+		defaultValues: {
+			producciones: [
+				{
+					fechaRegistro: '',
+					totalLitros: 0,
+					animalId: '',
+				},
+			],
+		},
+	});
+
 	const [page, setPage] = useState(1);
 	const loader = useRef(null);
-	const [animalesLocales, setAnimalesLocales] = useState([]);
-	const observer = useRef<IntersectionObserver>();
 	const lastAnimalElementRef = useRef(null);
 
 	const animales = useAnimalesStore(state => state.animales);
 	const getAnimales = useAnimalesStore(state => state.getAnimales);
 	const isLoading = useAnimalesStore(state => state.isLoading);
 
+	const partos = useReproduccionStore(state => state.partos);
+
 	const fincaId = useAuthStore(state => state.fincaId);
-	const limit = 30;
 
 	useEffect(() => {
-		// Solicita más animales cuando la página cambia
-		getAnimales(fincaId, page, limit);
+		getAnimales(fincaId, page);
 	}, [page]);
+
+	useEffect(() => {
+		if (fecha) {
+			// Verifica que fecha no sea null
+			const fechaFormatoISO = fecha.toISOString().split('T')[0];
+			animales.forEach((animal, index) => {
+				setValue(`producciones.${index}.animalId`, animal.id);
+				setValue(
+					`producciones.${index}.fechaRegistro`,
+					fechaFormatoISO
+				);
+			});
+		}
+	}, [animales, fecha, setValue]);
+
+	const onSubmit = handleSubmit(data => {
+		const registrosConTotalLitros = data.producciones.filter(
+			produccion => produccion.totalLitros > 0
+		);
+
+		console.log(registrosConTotalLitros);
+
+		setEditable(false);
+	});
 
 	if (isLoading) return <Loader />;
 
 	return (
-		<div className=' h-full flex flex-col gap-6'>
+		<form className=' h-full flex flex-col gap-6' onSubmit={onSubmit}>
 			<div className='flex flex-col'>
 				{/* ROW TITLE */}
 				<div className='grid grid-cols-5 bg-purple80 py-4 rounded-[5px] px-6 items-center justify-center'>
@@ -66,12 +113,24 @@ export const ProduccionTable = () => {
 									# {animal.numeroIdentificador}
 								</span>
 								<span className='font-bold text-center capitalize'>
-									{animal.fechaNacimiento}
+									{fecha?.toISOString().split('T')[0] || '-'}
 								</span>
 								<span className='font-bold text-center capitalize'>
-									{animal.sexo}
+									{'-'}
 								</span>
-								<input placeholder='ejem: 30ltrs' />
+								<input
+									placeholder={editable ? 'ejem: 30' : '-'}
+									type='number'
+									{...register(`producciones.${index}.totalLitros`)}
+									className={`${
+										editable
+											? 'border border-purple100'
+											: 'text-purple100 text-center'
+									} rounded-lg h-[45px] px-4 outline-none font-bold`}
+									disabled={!editable}
+									min={0}
+									step={0.1}
+								/>
 							</div>
 						))}
 					</div>
@@ -83,9 +142,11 @@ export const ProduccionTable = () => {
 					</div>
 				)}
 			</div>
-			<button className='bg-purple80 text-white self-center rounded-lg h-[45px] items-center justify-center flex px-16 font-bold'>
-				Guardar
-			</button>
-		</div>
+			{editable && (
+				<button className='bg-purple80 text-white self-center rounded-lg h-[45px] items-center justify-center flex px-16 font-bold'>
+					Guardar
+				</button>
+			)}
+		</form>
 	);
 };

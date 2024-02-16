@@ -12,7 +12,7 @@ export const ModalForm: React.FC<ModalFormProps> = ({
 	children,
 	title,
 	setIsOpenModalLocal,
-	height = '95%',
+	height = '90%',
 }) => {
 	const setIsOpenModal = useGeneralStore(
 		state => state.setIsOpenModal
@@ -22,7 +22,7 @@ export const ModalForm: React.FC<ModalFormProps> = ({
 		<div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
 			<div
 				className={`bg-white p-6 py-8 rounded-lg shadow-lg  relative  flex flex-col gap-2 
-				w-[60%] xl:[50%] h-[${height}] 
+				w-[85%] md:[75%] lg:w-[60%] xl:w-[50%] h-[${height}] 
 			`}
 			>
 				<button

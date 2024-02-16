@@ -155,7 +155,7 @@ export const EditParto: React.FC<EditPartoProps> = ({
 			onSubmit={onEditSubmit}
 		>
 			<div className='flex'></div>
-			<div className='flex flex-col gap-12 h-[700px] overflow-auto'>
+			<div className='flex flex-col gap-12 h-[650px] overflow-auto'>
 				<div className='grid grid-cols-2 gap-20'>
 					<InputDisabled
 						label='nombre'

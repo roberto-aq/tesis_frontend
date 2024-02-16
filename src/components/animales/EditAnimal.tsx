@@ -82,7 +82,7 @@ export const EditAnimal: React.FC<EditAnimalProps> = ({
 			className='flex flex-col gap-5  h-full'
 			onSubmit={onEditAnimal}
 		>
-			<div className='grid grid-cols-2 gap-8 gap-x-12 mr-1 mb-10 overflow-y-scroll h-[700px] px-5'>
+			<div className='grid grid-cols-2 gap-8 gap-x-12 mr-1 mb-10 overflow-y-scroll h-[600px] px-5'>
 				{/* ROW 1 */}
 				<ImageField />
 				<div className='flex flex-col gap-5  justify-center'>

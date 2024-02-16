@@ -112,6 +112,7 @@ const storeApi: StateCreator<AuthState> = set => ({
 			isLoading: false,
 			fincaId: undefined,
 			selectedFinca: null,
+			error: null,
 		});
 	},
 
@@ -132,7 +133,7 @@ const storeApi: StateCreator<AuthState> = set => ({
 				await AuthService.getAllInactiveUsers();
 			set({ usuariosInactivos });
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		}
 	},
 

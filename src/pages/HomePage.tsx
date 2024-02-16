@@ -60,28 +60,36 @@ export const HomePage = () => {
 				<h1 className='text-3xl font-bold text-center text-purple100 '>
 					Información General de la Finca
 				</h1>
-				<div className='grid grid-cols-3 gap-5'>
-					<CardInfoFinca
-						label='Nombre de la finca'
-						content={fincaById?.nombre || ''}
-					/>
-					<CardInfoFinca
-						label='Propietario'
-						content={fincaById?.propietario || ''}
-					/>
-					<CardInfoFinca
-						label='Ubicación o municipio'
-						content={fincaById?.municipio || ''}
-					/>
-					<CardInfoFinca
-						label='Área total'
-						content={`${fincaById?.areaTotal} hectáreas`}
-					/>
-					<CardInfoFinca
-						label='Área aprovechable'
-						content={`${fincaById?.areaAprovechable} hectáreas`}
-					/>
-				</div>
+				{fincaById ? (
+					<div className='grid grid-cols-3 gap-5'>
+						<CardInfoFinca
+							label='Nombre de la finca'
+							content={fincaById?.nombre || ''}
+						/>
+						<CardInfoFinca
+							label='Propietario'
+							content={fincaById?.propietario || ''}
+						/>
+						<CardInfoFinca
+							label='Ubicación o municipio'
+							content={fincaById?.municipio || ''}
+						/>
+						<CardInfoFinca
+							label='Área total'
+							content={`${fincaById?.areaTotal} hectáreas`}
+						/>
+						<CardInfoFinca
+							label='Área aprovechable'
+							content={`${fincaById?.areaAprovechable} hectáreas`}
+						/>
+					</div>
+				) : (
+					<div className='flex'>
+						<p className='text-purple100 text-center'>
+							No hay datos disponibles
+						</p>
+					</div>
+				)}
 			</div>
 			<div className='flex flex-col gap-3'>
 				<h1 className='text-3xl font-bold text-center text-purple100'>
