@@ -18,6 +18,7 @@ import { formatDateShort } from '../helpers/formatDate';
 import { MdEdit } from 'react-icons/md';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useState } from 'react';
+import { useRedirectOnFincaChange } from '../hooks/useRedirectOnFincaChange';
 
 const tableHeaders = [
 	'Fecha de registro',
@@ -62,6 +63,8 @@ export const ProduccionDetailPage = () => {
 		}
 		setModalError(false);
 	};
+
+	useRedirectOnFincaChange('/inicio/produccion', animal);
 
 	return (
 		<div className='flex  flex-col gap-6 flex-1'>

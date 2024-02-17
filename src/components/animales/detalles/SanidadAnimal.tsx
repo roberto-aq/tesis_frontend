@@ -158,7 +158,7 @@ export const SanidadAnimal = () => {
 						</button>
 						<button
 							className=' flex gap-2 items-center rounded-lg py-2 px-6 text-white bg-red-500 hover:bg-red-600 transition-all  font-bold text-sm'
-							onClick={() => setModalError(true)}
+							onClick={onDelete}
 						>
 							<FaTrashAlt
 								className='text-white  transition-all'
@@ -191,7 +191,7 @@ export const SanidadAnimal = () => {
 				</ModalForm>
 			)}
 
-			<ModalDelete handleDelete={onDelete} />
+			{/* <ModalDelete handleDelete={onDelete} /> */}
 		</LayoutInfoAnimal>
 	);
 };

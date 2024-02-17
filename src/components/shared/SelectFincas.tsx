@@ -4,6 +4,7 @@ import { useAuthStore } from '../../store';
 import { MdSearch } from 'react-icons/md';
 import { FaChevronDown } from 'react-icons/fa6';
 import { FincasResponse } from '../../interfaces';
+import { useAnimalesStore } from '../../store/animales';
 
 export const SelectFincas = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -22,11 +23,14 @@ export const SelectFincas = () => {
 	);
 	const setFincaId = useAuthStore(state => state.setFincaId);
 
+	const getAnimales = useAnimalesStore(state => state.getAnimales);
+
 	const onOptionClicked = (finca: FincasResponse) => () => {
 		setSelectedItem(finca);
 		setIsOpen(false);
 		setFincaId(finca.id);
 		setSelectedFinca(finca);
+		getAnimales(finca.id);
 	};
 
 	const toggling = () => setIsOpen(!isOpen);
@@ -39,13 +43,11 @@ export const SelectFincas = () => {
 
 	const getFinca = async () => {
 		await getFincas(1, 10, searchInput);
-		if (fincas.length > 0) {
+		if (fincas.length > 0 && !selectedFinca) {
 			const defaultFinca = fincas[0]; // Tomamos la primera finca como default
 			setFincaId(defaultFinca.id);
 			setSelectedFinca(defaultFinca);
 		}
-		// setFincaId(fincas[0].id);
-		console.log(selectedFinca);
 	};
 
 	useEffect(() => {

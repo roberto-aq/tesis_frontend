@@ -13,6 +13,7 @@ import { useGeneralStore, usePesajeStore } from '../store';
 import { FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
 import { PesajeAnimalLoader } from '../interfaces';
+import { useRedirectOnFincaChange } from '../hooks/useRedirectOnFincaChange';
 
 export const PesajeDetailPage = () => {
 	const animalById = useLoaderData() as PesajeAnimalLoader;
@@ -41,6 +42,8 @@ export const PesajeDetailPage = () => {
 	const onChangeModal = () => {
 		setIsOpenModal(true);
 	};
+
+	useRedirectOnFincaChange('/inicio/pesaje', animalById.animal);
 
 	return (
 		<div className='flex  flex-col gap-6 flex-1'>

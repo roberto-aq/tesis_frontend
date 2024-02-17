@@ -14,6 +14,7 @@ import { useGeneralStore } from '../store';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useAnimalesStore } from '../store/animales';
 import { useEffect } from 'react';
+import { useRedirectOnFincaChange } from '../hooks/useRedirectOnFincaChange';
 
 export const AnimalDetailPage = () => {
 	const isOpenModal = useGeneralStore(state => state.isOpenModal);
@@ -59,6 +60,8 @@ export const AnimalDetailPage = () => {
 		setShowAlertError(true);
 		setModalError(false);
 	};
+
+	useRedirectOnFincaChange('/inicio/animales', animalInfo);
 
 	return (
 		<div className='flex gap-10 flex-1'>

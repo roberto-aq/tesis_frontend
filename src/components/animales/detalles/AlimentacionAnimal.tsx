@@ -7,7 +7,7 @@ import {
 	Loader,
 	ModalDelete,
 	ModalForm,
-} from '../..';
+} from '../../../components';
 import { MdEdit } from 'react-icons/md';
 import { FaPlus, FaTrashAlt } from 'react-icons/fa';
 import { IoChevronBack } from 'react-icons/io5';
@@ -181,7 +181,7 @@ export const AlimentacionAnimal = () => {
 						</button>
 						<button
 							className=' flex gap-2 items-center rounded-lg py-2 px-6 text-white bg-red-500 hover:bg-red-600 transition-all  font-bold text-sm'
-							onClick={() => setModalError(true)}
+							onClick={onDelete}
 						>
 							<FaTrashAlt
 								className='text-white  transition-all'
@@ -214,7 +214,7 @@ export const AlimentacionAnimal = () => {
 				</ModalForm>
 			)}
 
-			<ModalDelete handleDelete={onDelete} />
+			{/* <ModalDelete handleDelete={onDelete} /> */}
 		</LayoutInfoAnimal>
 	);
 };

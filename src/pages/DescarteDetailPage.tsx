@@ -15,6 +15,7 @@ import { MdEdit } from 'react-icons/md';
 import { formatDateShort } from '../helpers/formatDate';
 import { DescarteAnimalLoader } from '../interfaces';
 import { useReproduccionStore } from '../store/reproduccion';
+import { useRedirectOnFincaChange } from '../hooks/useRedirectOnFincaChange';
 
 export const DescarteDetailPage = () => {
 	const animalById = useLoaderData() as DescarteAnimalLoader;
@@ -56,6 +57,8 @@ export const DescarteDetailPage = () => {
 
 		return age;
 	};
+
+	useRedirectOnFincaChange('/inicio/descarte', animalById.animal);
 
 	return (
 		<div className='flex  flex-col gap-6 flex-1'>

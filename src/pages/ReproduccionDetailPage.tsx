@@ -15,10 +15,10 @@ import { FaPlus } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { ReproduccionAnimalLoader } from '../interfaces';
 import { useReproduccionStore } from '../store/reproduccion';
+import { useRedirectOnFincaChange } from '../hooks/useRedirectOnFincaChange';
 
 export const ReproduccionDetailPage = () => {
 	const animalById = useLoaderData() as ReproduccionAnimalLoader;
-	// console.log(animalById);
 
 	const [activeTabIndex, setActiveTabIndex] = useState(0);
 
@@ -51,7 +51,7 @@ export const ReproduccionDetailPage = () => {
 	const getPartos = useReproduccionStore(state => state.getPartos);
 	const error = useReproduccionStore(state => state.error);
 
-	console.log(showAlertError, error);
+	useRedirectOnFincaChange('/inicio/reproduccion', animalById.info);
 
 	useEffect(() => {
 		getServicios(animalById.info.id);
