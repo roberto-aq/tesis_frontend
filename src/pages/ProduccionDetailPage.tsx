@@ -17,8 +17,9 @@ import { useProduccionStore } from '../store/produccion/produccion.store';
 import { formatDateShort } from '../helpers/formatDate';
 import { MdEdit } from 'react-icons/md';
 import { FaTrashAlt } from 'react-icons/fa';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRedirectOnFincaChange } from '../hooks/useRedirectOnFincaChange';
+import { useReproduccionStore } from '../store/reproduccion';
 
 const tableHeaders = [
 	'Fecha de registro',
@@ -39,6 +40,8 @@ export const ProduccionDetailPage = () => {
 		state => state.setIsOpenModal
 	);
 	const setModalError = useGeneralStore(state => state.setModalError);
+
+	const getPartos = useReproduccionStore(state => state.getPartos);
 
 	const produccionList = useProduccionStore(
 		state => state.produccionList
@@ -63,6 +66,10 @@ export const ProduccionDetailPage = () => {
 		}
 		setModalError(false);
 	};
+
+	useEffect(() => {
+		getPartos(animal.id);
+	}, []);
 
 	useRedirectOnFincaChange('/inicio/produccion', animal);
 

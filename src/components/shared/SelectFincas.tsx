@@ -52,9 +52,7 @@ export const SelectFincas = () => {
 
 	useEffect(() => {
 		getFinca();
-	}, [getFincas]);
-
-	if (isLoading) return <p>cargando...</p>;
+	}, [getFincas, searchInput]);
 
 	return (
 		<div className='w-[300px] mr-5 '>

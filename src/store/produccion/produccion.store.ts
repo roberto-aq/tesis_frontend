@@ -5,6 +5,8 @@ import { ProduccionService } from '../../services/produccion.service';
 
 export interface ProduccionState {
 	produccionList: ProduccionResponse[];
+	produccionListDate: ProduccionResponse[];
+	animalesConProduccion: any[];
 	isLoading: boolean;
 	error: string | null;
 
@@ -20,12 +22,23 @@ export interface ProduccionState {
 		id: string
 	) => Promise<void>;
 	deleteProduccion: (id: string, animalId: string) => Promise<void>;
+	getProduccionByDateAndFinca: (
+		fecha: string,
+		fincaId: string,
+		animales: any[]
+	) => Promise<void>;
+	setAnimalesConProduccion: (animales: any[]) => void;
+	createOrUpdateProduccion: (producciones: any) => Promise<void>;
 }
 
 const storeApi: StateCreator<ProduccionState> = set => ({
+	// Lista de producciones de un animal específico
 	produccionList: [],
+	// Lista de producciones por fecha de todos los animales
+	produccionListDate: [],
 	isLoading: false,
 	error: null,
+	animalesConProduccion: [],
 
 	setIsLoading: (value: boolean) => set({ isLoading: value }),
 	getProduccionByAnimal: async (animalId: string) => {
@@ -36,8 +49,7 @@ const storeApi: StateCreator<ProduccionState> = set => ({
 			);
 			set({ produccionList: data });
 		} catch (error: any) {
-			console.log(error.response.data);
-			throw new Error(error.response.data.message);
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -56,7 +68,7 @@ const storeApi: StateCreator<ProduccionState> = set => ({
 				produccionList: [...state.produccionList, newProduccion],
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -81,7 +93,7 @@ const storeApi: StateCreator<ProduccionState> = set => ({
 				),
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}
@@ -97,7 +109,55 @@ const storeApi: StateCreator<ProduccionState> = set => ({
 				),
 			}));
 		} catch (error: any) {
-			set({ error });
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	setAnimalesConProduccion: (animales: any[]) => {
+		set({ animalesConProduccion: animales });
+	},
+
+	getProduccionByDateAndFinca: async (
+		fecha: string,
+		fincaId: string,
+		animales: any[]
+	) => {
+		set({ isLoading: true, error: null });
+		try {
+			const data = await ProduccionService.getProduccionByDate(
+				fecha,
+				fincaId
+			);
+			const animalesActualizados = animales.map(animal => {
+				const produccion = data.find(
+					(p: any) => p.animal.id === animal.id
+				);
+				return { ...animal, produccion: produccion || null };
+			});
+			set({
+				produccionListDate: data,
+				animalesConProduccion: animalesActualizados,
+			});
+		} catch (error: any) {
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	createOrUpdateProduccion: async (producciones: any) => {
+		set({ isLoading: true });
+		try {
+			const data = await ProduccionService.createOrUpdateProduccion(
+				producciones
+			);
+			set(state => ({
+				produccionListDate: [...state.produccionListDate, ...data],
+			}));
+		} catch (error: any) {
+			set({ error: error.message });
 		} finally {
 			set({ isLoading: false });
 		}

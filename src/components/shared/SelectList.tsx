@@ -5,13 +5,16 @@ import { useAnimalesStore } from '../../store/animales';
 import { Animal } from '../../interfaces';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store';
+import { Loader } from './Loader';
 
 interface SelectListProps {
 	handleAnimalSelect: (animal: Animal) => void;
+	isLoading: boolean;
 }
 
 export const SelectList: React.FC<SelectListProps> = ({
 	handleAnimalSelect,
+	isLoading,
 }) => {
 	const navigate = useNavigate();
 	const [isOpen, setIsOpen] = useState(false);
@@ -46,6 +49,8 @@ export const SelectList: React.FC<SelectListProps> = ({
 		getAnimales(fincaId, 1, 1000, searchInput);
 	}, [searchInput]);
 
+	if (isLoading) return <Loader />;
+
 	return (
 		<div className='w-full  max-w-2xl'>
 			<div className='relative'>
@@ -55,7 +60,7 @@ export const SelectList: React.FC<SelectListProps> = ({
 				>
 					<p className='font-bold text-secondGray'>
 						{selectedItem
-							? `${selectedItem} - ${selectedItem.nombre}`
+							? `${selectedItem.numeroIdentificador} - ${selectedItem.nombre}`
 							: 'Seleccione un animal'}
 					</p>
 					<div className='pointer-events-none flex items-center justify-center'>

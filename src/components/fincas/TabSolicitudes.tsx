@@ -105,6 +105,7 @@ export const TabSolicitudes = () => {
 				<ModalInfoFinca
 					setModalLocalOpen={setModalLocalOpen}
 					usuario={selectedFinca as UsuariosInactivos}
+					activateUser={activateUser}
 				/>
 			)}
 		</div>

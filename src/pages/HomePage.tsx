@@ -5,6 +5,7 @@ import { useFincasStore } from '../store/fincas/fincas.store';
 import {
 	CardInfoFinca,
 	CardInfoGanado,
+	Loader,
 	ParrafoInfoGanado,
 } from '../components';
 
@@ -15,6 +16,9 @@ export interface Conteo {
 export const HomePage = () => {
 	const getAnimales = useAnimalesStore(state => state.getAnimales);
 	const animales = useAnimalesStore(state => state.animales);
+	const isLoadingAnimales = useAnimalesStore(
+		state => state.isLoading
+	);
 
 	const fincaId = useAuthStore(state => state.fincaId);
 
@@ -22,6 +26,7 @@ export const HomePage = () => {
 		state => state.getFincaByUser
 	);
 	const fincaById = useFincasStore(state => state.fincaById);
+	const isLoadingFincas = useFincasStore(state => state.isLoading);
 
 	let distribucionSexo: Conteo = { Hembra: 0, Macho: 0 };
 	let distribucionGrupo: Conteo = {};
@@ -52,7 +57,9 @@ export const HomePage = () => {
 			getAnimales(fincaId);
 			getFincaByUser(fincaId);
 		}
-	}, []);
+	}, [fincaId]);
+
+	if (isLoadingFincas && isLoadingAnimales) return <Loader />;
 
 	return (
 		<div className='flex flex-col gap-6'>

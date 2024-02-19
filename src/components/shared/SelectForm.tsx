@@ -99,19 +99,25 @@ export const SelectForm: React.FC<SelectFormProps> = ({
 							ref={dropdownRef}
 							className='absolute w-full bg-gray-100 rounded-[8px] z-10 mt-1 '
 						>
-							<div className='flex flex-col max-h-[150px] overflow-y-scroll '>
-								{items.map(item => (
-									<div
-										className='px-6 py-4 hover:bg-gray-200 cursor-pointer flex gap-3 items-center border-b border-[#bbb] '
-										onClick={onOptionClicked(item)}
-										key={item.id}
-									>
-										<div className='flex w-2 h-2 bg-[#808080] rounded-full'></div>
-										<span className='font-bold capitalize text-[#808080] text-sm'>
-											{item.nombre || item.descripcion}
-										</span>
-									</div>
-								))}
+							<div className='flex flex-col max-h-[150px] overflow-auto '>
+								{items.length > 0 ? (
+									items.map(item => (
+										<div
+											className='px-6 py-4 hover:bg-gray-200 cursor-pointer flex gap-3 items-center border-b border-[#bbb] '
+											onClick={onOptionClicked(item)}
+											key={item.id}
+										>
+											<div className='flex w-2 h-2 bg-[#808080] rounded-full'></div>
+											<span className='font-bold capitalize text-[#808080] text-sm'>
+												{item.nombre || item.descripcion}
+											</span>
+										</div>
+									))
+								) : (
+									<p className='py-4 text-center font-bold'>
+										No hay opciones disponibles
+									</p>
+								)}
 							</div>
 						</div>
 					)}

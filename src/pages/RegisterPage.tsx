@@ -22,13 +22,15 @@ export const RegisterPage = () => {
 
 	const onRegister = handleSubmit(data => {
 		const usuarioNuevo = {
-			email: data.email,
+			email: data.email.toLowerCase(),
 			password: data.password,
 			nombre: data.nombre,
 			apellidos: data.apellidos,
 			telefono: data.telefono,
 			direccion: data.direccion,
 		};
+
+		console.log(usuarioNuevo);
 
 		registerUser(usuarioNuevo);
 	});
@@ -56,21 +58,20 @@ export const RegisterPage = () => {
 
 	// Observar el valor del campo de contraseña
 	const password = watch('password');
-	const confirmPassword = watch('confirmPassword');
 
 	return (
 		<div className=' container bg-purple60 h-[700px] rounded-[15px]'>
 			<SectionAuth>
 				{!token ? (
 					<form
-						className='flex-1   flex   justify-center flex-col gap-5 h-[100%] overflow-auto'
+						className='flex-1   flex   justify-center flex-col gap-3 h-full overflow-auto py-10 pt-20'
 						onSubmit={onRegister}
 					>
-						<h2 className='text-purple80 font-bold text-[45px] text-center mb-10 my-10'>
+						<h2 className='text-purple80 font-bold text-[45px] text-center '>
 							Registrarse
 						</h2>
 
-						<div className='grid grid-cols-2  h-full gap-4'>
+						<div className='grid grid-cols-2  h-full gap-3'>
 							<div className='col-span-2'>
 								<InputFormAuth
 									label='Correo Electrónico'
@@ -97,6 +98,9 @@ export const RegisterPage = () => {
 								register={register}
 								required={true}
 								errors={errors}
+								validate={value =>
+									value === password || 'Las contraseñas no coinciden'
+								} // Aquí aplicas la validación personalizada
 							/>
 
 							<InputFormAuth

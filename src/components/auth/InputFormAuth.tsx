@@ -26,6 +26,7 @@ interface InputFormAuthProps {
 	isTextarea?: boolean;
 	isDisabled?: boolean;
 	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	validate?: (value: string) => string | boolean; // Nueva prop de validación
 }
 export const InputFormAuth: React.FC<InputFormAuthProps> = ({
 	label,
@@ -38,8 +39,12 @@ export const InputFormAuth: React.FC<InputFormAuthProps> = ({
 	required,
 	isTextarea,
 	isDisabled,
+	validate,
 }) => {
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+	// Determina si existe un error para este campo y extrae el mensaje de error si es necesario.
+	const errorMessage = errors[name]?.message || errorField?.message;
 
 	return (
 		<div className='flex flex-col gap-2 px-5 '>
@@ -86,6 +91,19 @@ export const InputFormAuth: React.FC<InputFormAuthProps> = ({
 							value: true,
 							message: `El campo ${label} es requerido`,
 						},
+						validate: (value: string) => {
+							if (type === 'password') {
+								// Verifica que la contraseña tenga al menos 6 caracteres, una mayúscula, una minúscula y un número
+								const strongPasswordPattern =
+									/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+								return (
+									strongPasswordPattern.test(value) ||
+									'La contraseña debe tener al menos 6 caracteres, una mayúscula, una minúscula y un número'
+								);
+							}
+							if (validate) return validate(value); // Para otras validaciones personalizadas
+							return true;
+						},
 					})}
 					placeholder={placeholder}
 				/>
@@ -112,7 +130,11 @@ export const InputFormAuth: React.FC<InputFormAuthProps> = ({
 				)}
 			</div>
 
-			{/* {error && <span>{error}</span>} */}
+			{errorMessage && (
+				<p className='text-red-500 text-[13px] italic font-bold'>
+					{errorMessage as string}
+				</p>
+			)}
 		</div>
 	);
 };

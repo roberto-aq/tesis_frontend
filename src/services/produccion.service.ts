@@ -59,4 +59,34 @@ export class ProduccionService {
 			throw new Error(error.response.data.message);
 		}
 	}
+
+	static async createOrUpdateProduccion(
+		producciones: ProduccionResponse[]
+	) {
+		try {
+			const { data } = await api.post(
+				'/produccion/masiva',
+				producciones
+			);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	}
+
+	static async getProduccionByDate(date: string, fincaId: string) {
+		try {
+			const { data } = await api.get(`/produccion/byFecha`, {
+				params: {
+					fecha: date,
+					fincaId,
+				},
+			});
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	}
 }

@@ -7,11 +7,13 @@ import { formatearFecha } from '../../helpers/formatDate';
 export interface ModalInfoFincaProps {
 	setModalLocalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	usuario: UsuariosInactivos;
+	activateUser: (usuario: UsuariosInactivos) => Promise<void>;
 }
 
 export const ModalInfoFinca: React.FC<ModalInfoFincaProps> = ({
 	setModalLocalOpen,
 	usuario,
+	activateUser,
 }) => {
 	const { finca } = usuario;
 
@@ -128,7 +130,10 @@ export const ModalInfoFinca: React.FC<ModalInfoFincaProps> = ({
 							/>
 						</div>
 					</div>
-					<button className='bg-secondaryGreen self-center h-[45px] flex items-center justify-center text-white font-bold gap-3 px-10 rounded-lg mt-5 hover:bg-green-600'>
+					<button
+						className='bg-secondaryGreen self-center h-[45px] flex items-center justify-center text-white font-bold gap-3 px-10 rounded-lg mt-5 hover:bg-green-600'
+						onClick={() => activateUser(usuario)}
+					>
 						<IoCheckmarkCircle size={20} />
 						Aceptar
 					</button>

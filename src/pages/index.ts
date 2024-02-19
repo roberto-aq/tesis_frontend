@@ -16,3 +16,4 @@ export * from './ProduccionPage';
 export * from './RegisterPage';
 export * from './ReproduccionDetailPage';
 export * from './ReproduccionPage';
+export * from './AdminPage';

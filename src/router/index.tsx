@@ -17,6 +17,7 @@ import {
 	DescarteDetailPage,
 	ProduccionDetailPage,
 	FincaDetailPage,
+	AdminPage,
 } from '../pages';
 import {
 	AlimentacionAnimal,
@@ -178,6 +179,13 @@ export const router = createBrowserRouter([
 							crumb: (data: DescarteAnimalLoader) => {
 								return data.animal.nombre;
 							},
+						},
+					},
+					{
+						path: 'administrador',
+						element: <AdminPage />,
+						handle: {
+							crumb: () => 'Administrador',
 						},
 					},
 				],
