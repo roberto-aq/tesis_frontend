@@ -5,7 +5,6 @@ import { SelectFincas } from '../shared/SelectFincas';
 
 export const Header = () => {
 	const user = useAuthStore(state => state.user);
-	console.log(user);
 
 	return (
 		<header className='flex bg-white py-3 px-10'>

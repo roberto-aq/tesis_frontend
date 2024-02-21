@@ -8,6 +8,14 @@ export interface estadosReproductivosSlice {
 	error: string | null;
 
 	getEstadosReproductivos: () => Promise<void>;
+	createEstadoReproductivo: (
+		estadoReproductivo: EstadoReproductivo
+	) => Promise<void>;
+	updateEstadoReproductivo: (
+		estadoReproductivo: EstadoReproductivo,
+		id: number
+	) => Promise<void>;
+	deleteEstadoReproductivo: (id: number) => Promise<void>;
 }
 
 export const createEstadosReproductivosSlice: StateCreator<
@@ -24,6 +32,64 @@ export const createEstadosReproductivosSlice: StateCreator<
 			const estadosReproductivos =
 				await AnimalService.getEstadosReproductivos();
 			set({ estadosReproductivos });
+		} catch (error: any) {
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	createEstadoReproductivo: async (
+		estadoReproductivo: EstadoReproductivo
+	) => {
+		try {
+			set({ isLoading: true });
+
+			const data = await AnimalService.createEstadoReproductivo(
+				estadoReproductivo
+			);
+			set((state: any) => ({
+				estadosReproductivos: [...state.estadosReproductivos, data],
+			}));
+		} catch (error: any) {
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	updateEstadoReproductivo: async (estadoReproductivo, id) => {
+		try {
+			set({ isLoading: true });
+			const updatedEstadoReproductivo =
+				await AnimalService.updateEstadoReproductivo(
+					estadoReproductivo,
+					id
+				);
+			set(state => ({
+				estadosReproductivos: state.estadosReproductivos.map(
+					estadoReproductivo =>
+						estadoReproductivo.id === updatedEstadoReproductivo._id
+							? updatedEstadoReproductivo
+							: estadoReproductivo
+				),
+			}));
+		} catch (error: any) {
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	deleteEstadoReproductivo: async id => {
+		try {
+			set({ isLoading: true });
+			await AnimalService.deleteEstadoReproductivo(id);
+			set(state => ({
+				estadosReproductivos: state.estadosReproductivos.filter(
+					estadoReproductivo => estadoReproductivo.id !== id
+				),
+			}));
 		} catch (error: any) {
 			set({ error: error.message });
 		} finally {

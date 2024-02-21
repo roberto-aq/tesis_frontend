@@ -8,6 +8,9 @@ export interface GruposSlice {
 	error: string | null;
 
 	getGrupos: () => Promise<void>;
+	createGrupo: (grupo: Grupo) => Promise<void>;
+	updateGrupo: (grupo: Grupo, id: string) => Promise<void>;
+	deleteGrupo: (id: string) => Promise<void>;
 }
 
 export const createGruposSlice: StateCreator<GruposSlice> = set => ({
@@ -20,6 +23,48 @@ export const createGruposSlice: StateCreator<GruposSlice> = set => ({
 			set({ isLoading: true });
 			const grupos = await AnimalService.getGrupos();
 			set({ grupos });
+		} catch (error: any) {
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	createGrupo: async grupo => {
+		try {
+			set({ isLoading: true });
+			const newGrupo = await AnimalService.createGrupo(grupo);
+			set(state => ({ grupos: [...state.grupos, newGrupo] }));
+		} catch (error: any) {
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	updateGrupo: async (grupo, id) => {
+		try {
+			set({ isLoading: true });
+			const updatedGrupo = await AnimalService.updateGrupo(grupo, id);
+			set(state => ({
+				grupos: state.grupos.map(grupo =>
+					grupo.id === updatedGrupo._id ? updatedGrupo : grupo
+				),
+			}));
+		} catch (error: any) {
+			set({ error: error.message });
+		} finally {
+			set({ isLoading: false });
+		}
+	},
+
+	deleteGrupo: async id => {
+		try {
+			set({ isLoading: true });
+			await AnimalService.deleteGrupo(id);
+			set(state => ({
+				grupos: state.grupos.filter(grupo => grupo.id !== id),
+			}));
 		} catch (error: any) {
 			set({ error: error.message });
 		} finally {

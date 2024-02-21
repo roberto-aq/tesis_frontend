@@ -23,6 +23,12 @@ export const Sidebar = () => {
 					if (texto === 'Fincas' && user?.rol !== 'administrador')
 						return null;
 
+					if (
+						texto === 'Administrador' &&
+						user?.rol !== 'administrador'
+					)
+						return null;
+
 					return (
 						<NavLink
 							to={ruta}

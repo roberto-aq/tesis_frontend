@@ -11,6 +11,7 @@ import {
 	GiPoisonBottle,
 } from 'react-icons/gi';
 import { MdPets } from 'react-icons/md';
+import { RiAdminLine } from 'react-icons/ri';
 
 export const enlacesAnimales = [
 	{
@@ -74,5 +75,10 @@ export const enlacesSidebar = [
 		ruta: 'descarte',
 		texto: 'Descarte',
 		Icono: GiDeathJuice,
+	},
+	{
+		ruta: 'administrador',
+		texto: 'Administrador',
+		Icono: RiAdminLine,
 	},
 ];

@@ -76,6 +76,39 @@ export class AnimalService {
 		}
 	};
 
+	static createRaza = async (raza: any) => {
+		try {
+			const { data } = await api.post('/animales/razas/new', raza);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	};
+
+	static updateRaza = async (raza: any, razaId: string) => {
+		try {
+			const { data } = await api.patch(
+				`/animales/razas/${razaId}`,
+				raza
+			);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	};
+
+	static deleteRaza = async (razaId: string) => {
+		try {
+			const { data } = await api.delete(`/animales/razas/${razaId}`);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	};
+
 	/* ********************************** */
 	/*        ESTADOS REPRODUCTIVOS       */
 	/* ********************************** */
@@ -89,12 +122,88 @@ export class AnimalService {
 		}
 	};
 
+	static createEstadoReproductivo = async (estado: any) => {
+		try {
+			const { data } = await api.post(
+				'/animales/estado-reproductivo/new',
+				estado
+			);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	};
+
+	static updateEstadoReproductivo = async (
+		estado: any,
+		estadoId: number
+	) => {
+		try {
+			const { data } = await api.patch(
+				`/animales/estado-reproductivo/${estadoId}`,
+				estado
+			);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	};
+
+	static deleteEstadoReproductivo = async (estadoId: number) => {
+		try {
+			const { data } = await api.delete(
+				`/animales/estado-reproductivo/${estadoId}`
+			);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	};
+
 	/* ********************************** */
 	/*               GRUPOS               */
 	/* ********************************** */
 	static getGrupos = async () => {
 		try {
 			const { data } = await api.get('/animales/grupos');
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	};
+
+	static createGrupo = async (grupo: any) => {
+		try {
+			const { data } = await api.post('/animales/grupos/new', grupo);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	};
+
+	static updateGrupo = async (grupo: any, grupoId: string) => {
+		try {
+			const { data } = await api.patch(
+				`/animales/grupos/${grupoId}`,
+				grupo
+			);
+			return data;
+		} catch (error: any) {
+			console.log(error.response.data);
+			throw new Error(error.response.data.message);
+		}
+	};
+
+	static deleteGrupo = async (grupoId: string) => {
+		try {
+			const { data } = await api.delete(
+				`/animales/grupos/${grupoId}`
+			);
 			return data;
 		} catch (error: any) {
 			console.log(error.response.data);

@@ -152,7 +152,7 @@ export const ProduccionDetailPage = () => {
 			</LayoutInfoAnimal>
 
 			{isOpenModal && (
-				<ModalForm title='Agregar Producción'>
+				<ModalForm title='Agregar Producción' height=''>
 					<AddProduccion animalById={animal} />
 				</ModalForm>
 			)}
@@ -160,6 +160,7 @@ export const ProduccionDetailPage = () => {
 				<ModalForm
 					title={'Editar Producción'}
 					setIsOpenModalLocal={setIsOpenModalLocal}
+					height=''
 				>
 					<EditProduccion
 						animalById={animal}

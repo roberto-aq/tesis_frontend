@@ -97,3 +97,17 @@ export * from './fincas/CardContentInfo';
 export * from './home/CardInfoFinca';
 export * from './home/CardInfoGanado';
 export * from './home/ParrafoInfoGanado';
+/* ********************************** */
+/*            ADMINISTRADOR           */
+/* ********************************** */
+export * from './administrador/AddRaza';
+export * from './administrador/EditRaza';
+export * from './administrador/CardItem';
+export * from './administrador/AddEstadoReproductivo';
+export * from './administrador/EditEstadoReproductivo';
+export * from './administrador/AddGrupo';
+export * from './administrador/EditGrupo';
+export * from './administrador/AddCausaGeneral';
+export * from './administrador/EditCausaGeneral';
+export * from './administrador/AddCausaEspecifica';
+export * from './administrador/EditCausaEspecifica';
