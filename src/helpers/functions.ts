@@ -67,3 +67,18 @@ export const calcularIntervaloEntrePartos = (partos: Parto[]) => {
 
 	return intervalos;
 };
+
+// Función para calcular los días de lactancia de los registros de producción de un animal
+export const calcularDiasLactancia = (
+	fechaRegistro: string,
+	fechaUltimoParto: string
+) => {
+	const fechaInicio = new Date(fechaUltimoParto);
+	const fechaFin = new Date(fechaRegistro);
+	const diferenciaTiempo =
+		fechaFin.getTime() - fechaInicio.getTime();
+	const diferenciaDias = Math.ceil(
+		diferenciaTiempo / (1000 * 3600 * 24)
+	);
+	return diferenciaDias;
+};

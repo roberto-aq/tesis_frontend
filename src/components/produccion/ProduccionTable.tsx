@@ -151,20 +151,9 @@ export const ProduccionTable: React.FC<ProduccionTableProps> = ({
 				{animales.length > 0 ? (
 					<div className='h-[400px] overflow-auto'>
 						{animalesConProduccion.map((animal, index) => {
-							// Obteniendo la fecha del último parto, asumiendo que el array de partos está ordenado
-							const ultimoParto =
-								animal.partos && animal.partos.length > 0
-									? new Date(animal.partos[0].fechaParto)
-									: null;
-
-							// Calculando los días de lactancia si hay fecha de último parto y fecha seleccionada
-							const diasLactancia =
-								ultimoParto && fecha
-									? Math.floor(
-											(fecha.getTime() - ultimoParto.getTime()) /
-												(1000 * 3600 * 24)
-									  )
-									: '-';
+							// TODO: Calcular días de lactancia y mostrarlo en el input a partir de la fecha de registro y el último parto. Este proceso esta en el archivo functions.ts. Hace falta implementarlo
+							// ! Sin embargo, hacer esto podría ser ineficiente. Necesito mandar una petición por cada animal para obtener el último parto y calcular los días de lactancia.
+							// * En la página de detalles de producción de cada animal, se puede visualizar los días de lactancia.
 
 							return (
 								<div

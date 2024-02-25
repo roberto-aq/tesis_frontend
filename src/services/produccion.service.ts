@@ -7,7 +7,6 @@ export class ProduccionService {
 			const { data } = await api.get(
 				`/produccion/animal/${animalId}`
 			);
-			console.log(data);
 			return data;
 		} catch (error: any) {
 			console.log(error.response.data);

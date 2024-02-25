@@ -21,7 +21,7 @@ export const EditRaza: React.FC<EditRazaProps> = ({
 		reset,
 	} = useForm();
 
-    console.log(raza)
+	console.log(raza);
 
 	const updateRaza = useAnimalesStore(state => state.updateRaza);
 
@@ -40,7 +40,7 @@ export const EditRaza: React.FC<EditRazaProps> = ({
 				nombre: raza.nombre,
 			});
 		}
-	}, []);
+	}, [raza, reset]);
 
 	return (
 		<form

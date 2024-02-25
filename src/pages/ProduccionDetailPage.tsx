@@ -42,6 +42,7 @@ export const ProduccionDetailPage = () => {
 	const setModalError = useGeneralStore(state => state.setModalError);
 
 	const getPartos = useReproduccionStore(state => state.getPartos);
+	const partos = useReproduccionStore(state => state.partos);
 
 	const produccionList = useProduccionStore(
 		state => state.produccionList
@@ -72,6 +73,28 @@ export const ProduccionDetailPage = () => {
 	}, []);
 
 	useRedirectOnFincaChange('/inicio/produccion', animal);
+
+	// * Calcular días de lactancia
+	const partosOrdenados = partos
+		.slice()
+		.sort(
+			(a, b) => +new Date(b.fechaParto) - +new Date(a.fechaParto)
+		);
+	const ultimoParto = partosOrdenados[0]; // El parto más reciente
+
+	const calcularDiasLactancia = (
+		fechaRegistro: string,
+		fechaUltimoParto: string
+	) => {
+		const fechaInicio = new Date(fechaUltimoParto);
+		const fechaFin = new Date(fechaRegistro);
+		const diferenciaTiempo =
+			fechaFin.getTime() - fechaInicio.getTime();
+		const diferenciaDias = Math.ceil(
+			diferenciaTiempo / (1000 * 3600 * 24)
+		);
+		return diferenciaDias;
+	};
 
 	return (
 		<div className='flex  flex-col gap-6 flex-1'>
@@ -107,7 +130,12 @@ export const ProduccionDetailPage = () => {
 									{formatDateShort(produccion.fechaRegistro)}
 								</span>
 								<span className='font-bold text-center capitalize'>
-									1
+									{ultimoParto
+										? calcularDiasLactancia(
+												produccion.fechaRegistro,
+												ultimoParto.fechaParto
+										  )
+										: '-'}
 								</span>
 								<span className='font-bold text-center capitalize'>
 									{produccion.totalLitros}
@@ -153,7 +181,10 @@ export const ProduccionDetailPage = () => {
 
 			{isOpenModal && (
 				<ModalForm title='Agregar Producción' height=''>
-					<AddProduccion animalById={animal} />
+					<AddProduccion
+						animalById={animal}
+						ultimoParto={ultimoParto}
+					/>
 				</ModalForm>
 			)}
 			{isOpenModalLocal && (

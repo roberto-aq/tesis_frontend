@@ -47,6 +47,8 @@ export const EditProduccion: React.FC<EditProduccionProps> = ({
 		setIsOpenModalLocal(false);
 	});
 
+	// TODO: De igual manera hace falta calcular los días de lactancia. La descripción esta en el AddProduccion.tsx
+
 	return (
 		<form
 			className='flex flex-col gap-5  h-full'
@@ -74,7 +76,7 @@ export const EditProduccion: React.FC<EditProduccionProps> = ({
 				<InputDisabled
 					label='Días de Lactancia'
 					type='text'
-					value='20'
+					value='-'
 				/>
 			</div>
 			<ButtonAction textLabel='Guardar' />

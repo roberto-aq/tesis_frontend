@@ -65,7 +65,7 @@ export const AnimalDetailPage = () => {
 
 	return (
 		<div className='flex gap-10 flex-1'>
-			<SidebarDetailsAnimal />
+			<SidebarDetailsAnimal animal={animalInfo} />
 			<div className='flex  flex-col gap-6 flex-1'>
 				<section className='flex flex-col'>
 					<div className='flex   justify-between'>
