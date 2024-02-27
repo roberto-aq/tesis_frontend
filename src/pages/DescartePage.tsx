@@ -7,7 +7,6 @@ export const DescartePage = () => {
 	const [selectedAnimal, setSelectedAnimal] = useState<Animal | null>(
 		null
 	);
-	const isLoading = useDescarteStore(state => state.isLoading);
 
 	const handleAnimalSelect = (animal: Animal) => {
 		setSelectedAnimal(animal);
@@ -15,10 +14,7 @@ export const DescartePage = () => {
 
 	return (
 		<div className='flex  flex-col gap-6 flex-1'>
-			<SelectList
-				handleAnimalSelect={handleAnimalSelect}
-				isLoading={isLoading}
-			/>
+			<SelectList handleAnimalSelect={handleAnimalSelect} />
 		</div>
 	);
 };

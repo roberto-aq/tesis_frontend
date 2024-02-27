@@ -11,14 +11,9 @@ export const PesajePage = () => {
 	const handleAnimalSelect = (animal: Animal) => {
 		setSelectedAnimal(animal);
 	};
-	const isLoading = usePesajeStore(state => state.isLoading);
-
 	return (
 		<div className='flex  flex-col gap-6 flex-1'>
-			<SelectList
-				handleAnimalSelect={handleAnimalSelect}
-				isLoading={isLoading}
-			/>
+			<SelectList handleAnimalSelect={handleAnimalSelect} />
 		</div>
 	);
 };
