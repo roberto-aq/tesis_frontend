@@ -65,10 +65,7 @@ export const ProduccionPage = () => {
 
 	return (
 		<div className='flex  flex-col gap-6 flex-1'>
-			<SelectList
-				handleAnimalSelect={handleAnimalSelect}
-				isLoading={isLoading}
-			/>
+			<SelectList handleAnimalSelect={handleAnimalSelect} />
 			<div className='bg-white rounded-lg flex flex-col gap-5 relative p-8 '>
 				<div className='flex justify-end'>
 					<button

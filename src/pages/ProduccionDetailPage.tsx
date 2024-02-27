@@ -14,7 +14,7 @@ import { LayoutInfoAnimal } from '../components/animales/detalles/LayoutInfoAnim
 import { useGeneralStore } from '../store';
 import { FaPlus } from 'react-icons/fa6';
 import { useProduccionStore } from '../store/produccion/produccion.store';
-import { formatDateShort } from '../helpers/formatDate';
+import { formatearFecha } from '../helpers/formatDate';
 import { MdEdit } from 'react-icons/md';
 import { FaTrashAlt } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
@@ -127,7 +127,7 @@ export const ProduccionDetailPage = () => {
 								key={produccion.id}
 							>
 								<span className='font-bold text-center capitalize'>
-									{formatDateShort(produccion.fechaRegistro)}
+									{formatearFecha(produccion.fechaRegistro)}
 								</span>
 								<span className='font-bold text-center capitalize'>
 									{ultimoParto

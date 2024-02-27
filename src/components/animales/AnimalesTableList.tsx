@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { useAnimalesStore } from '../../store/animales';
-import { Loader } from '../shared/Loader';
 
 const tableHeaders = [
 	'Nombre',
@@ -14,8 +13,6 @@ const tableHeaders = [
 export const AnimalesTableList = () => {
 	const animales = useAnimalesStore(state => state.animales);
 	const isLoading = useAnimalesStore(state => state.isLoading);
-
-	if (isLoading) return <Loader />;
 
 	return (
 		<div className='overflow-x-auto'>
