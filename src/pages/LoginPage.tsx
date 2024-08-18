@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { InputFormAuth, SectionAuth } from '../components';
 import { useAuthStore } from '../store';
 import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 
 interface LoginFormState {
 	email: string;
@@ -38,7 +39,15 @@ export const LoginPage = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm();
+		reset,
+	} = useForm<LoginFormState>();
+
+	useEffect(() => {
+		reset({
+			email: 'usuario@prueba.com',
+			password: 'Abc123',
+		});
+	}, []);
 
 	const loginUser = useAuthStore(state => state.loginUser);
 
